@@ -38,3 +38,6 @@ Thumbs.db
 # Environment variables
 .env
 .env.local
+.agents/
+__pycache__/
+*.py[cod]
