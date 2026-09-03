@@ -1,0 +1,152 @@
+[
+  {
+    "id": "entree_01",
+    "nom": "Pastels au Thon",
+    "categorie": "Entrées",
+    "description": "Beignets dorés et croustillants farcis au thon assaisonné, servis avec une sauce tomate pimentée maison.",
+    "ingredients": ["farine", "thon", "oignon", "tomate", "epices", "piment"],
+    "tags": ["entree", "poisson", "chaud", "halal"],
+    "prix": 4.50,
+    "disponible": true
+  },
+  {
+    "id": "entree_02",
+    "nom": "Salade César Fraîcheur",
+    "categorie": "Entrées",
+    "description": "Laitue romaine croquante, aiguillettes de poulet grillé, copeaux de parmesan et croûtons dorés à l'ail.",
+    "ingredients": ["salade romaine", "poulet", "parmesan", "croutons", "sauce cesar"],
+    "tags": ["entree", "volaille", "froid", "halal"],
+    "prix": 5.50,
+    "disponible": true
+  },
+  {
+    "id": "entree_03",
+    "nom": "Alloco Doré",
+    "categorie": "Entrées",
+    "description": "Bananes plantains mûres frites à point, servies avec sauce pimentée et sauce tomate oignon douce.",
+    "ingredients": ["banane plantain", "huile", "sel", "piment doux"],
+    "tags": ["entree", "vegetarien", "chaud", "sans_gluten"],
+    "prix": 4.00,
+    "disponible": true
+  },
+  {
+    "id": "plat_01",
+    "nom": "Steak Frites Maison",
+    "categorie": "Plats Principaux",
+    "description": "Pièce de boeuf tendre grillée selon votre goût, accompagnée de frites maison croustillantes et sauce au choix.",
+    "ingredients": ["viande de boeuf", "pommes de terre", "sel", "beurre", "poivre"],
+    "tags": ["plat_principal", "viande", "chaud", "halal"],
+    "prix": 15.50,
+    "disponible": true
+  },
+  {
+    "id": "plat_02",
+    "nom": "Thiéboudienne Rouge (Tchep Poisson)",
+    "categorie": "Plats Principaux",
+    "description": "Riz rouge sénégalais mijoté aux épices, avec filet de mérou braisé, carottes, manioc et chou savoureux.",
+    "ingredients": ["riz parfumé", "poisson merou", "carotte", "manioc", "chou", "concentre de tomate", "epices"],
+    "tags": ["plat_principal", "poisson", "chaud", "halal", "specialite"],
+    "prix": 14.00,
+    "disponible": true
+  },
+  {
+    "id": "plat_03",
+    "nom": "Poulet Yassa au Citron Confit",
+    "categorie": "Plats Principaux",
+    "description": "Cuisses de poulet fermier marinées aux citrons verts et oignons caramélisés à la moutarde de Dijon, riz blanc.",
+    "ingredients": ["cuisse de poulet", "oignons", "citron vert", "moutarde", "riz blanc", "ail"],
+    "tags": ["plat_principal", "volaille", "chaud", "halal", "specialite"],
+    "prix": 13.50,
+    "disponible": true
+  },
+  {
+    "id": "plat_04",
+    "nom": "Choukouya d'Agneau Braisé",
+    "categorie": "Plats Principaux",
+    "description": "Morceaux d'agneau grillés et assaisonnés aux épices kankan traditionnelles, servis avec oignons et tomates fraîches.",
+    "ingredients": ["viande d agneau", "epice kankan", "oignon", "tomate", "piment"],
+    "tags": ["plat_principal", "viande", "chaud", "halal", "specialite", "sans_gluten"],
+    "prix": 16.00,
+    "disponible": true
+  },
+  {
+    "id": "plat_05",
+    "nom": "Burger Gourmet & Frites",
+    "categorie": "Plats Principaux",
+    "description": "Pain brioché artisanal, steak haché pur boeuf 150g, cheddar affiné, oignons caramélisés et sauce secrète.",
+    "ingredients": ["pain burger", "boeuf hache", "cheddar", "oignons", "salade", "tomate", "sauce maison"],
+    "tags": ["plat_principal", "viande", "chaud", "halal"],
+    "prix": 12.50,
+    "disponible": true
+  },
+  {
+    "id": "plat_06",
+    "nom": "Mafé au Boeuf Fondant",
+    "categorie": "Plats Principaux",
+    "description": "Ragoût onctueux à la pâte d'arachide mijotée avec morceaux de boeuf fondants, patates douces et riz jasmin.",
+    "ingredients": ["viande de boeuf", "pate d arachide", "patate douce", "tomate", "riz jasmin"],
+    "tags": ["plat_principal", "viande", "chaud", "halal", "arachide"],
+    "prix": 14.50,
+    "disponible": true
+  },
+  {
+    "id": "dessert_01",
+    "nom": "Tiramisu Traditionnel au Café",
+    "categorie": "Desserts",
+    "description": "Crème mascarpone légère et onctueuse, biscuits à la cuillère imbibés d'expresso corsé, saupoudré de cacao.",
+    "ingredients": ["mascarpone", "cafe", "biscuit", "cacao", "oeuf", "sucre"],
+    "tags": ["dessert", "sucre", "froid", "vegetarien"],
+    "prix": 6.00,
+    "disponible": true
+  },
+  {
+    "id": "dessert_02",
+    "nom": "Fondant au Chocolat Coeur Coulant",
+    "categorie": "Desserts",
+    "description": "Gâteau au chocolat noir intense avec coeur chaud et coulant, accompagné d'une boule de glace vanille Bourbon.",
+    "ingredients": ["chocolat noir", "beurre", "oeuf", "farine", "sucre", "glace vanille"],
+    "tags": ["dessert", "sucre", "chaud", "vegetarien"],
+    "prix": 6.50,
+    "disponible": true
+  },
+  {
+    "id": "dessert_03",
+    "nom": "Thiéry Déguê / Thiakry Gourmand",
+    "categorie": "Desserts",
+    "description": "Semoule de couscous de mil sucrée mélangée à un yaourt crémeux, parfumé à la muscade et fleur d'oranger.",
+    "ingredients": ["couscous de mil", "yaourt", "lait concentre", "sucre vanille", "fleur d oranger"],
+    "tags": ["dessert", "sucre", "froid", "vegetarien", "specialite"],
+    "prix": 5.00,
+    "disponible": true
+  },
+  {
+    "id": "boisson_01",
+    "nom": "Jus de Bissap Maison",
+    "categorie": "Boissons",
+    "description": "Infusion artisanale de fleurs d'hibiscus biologique, fraîchement parfumée à la menthe fraîche et touche de vanille.",
+    "ingredients": ["fleurs d hibiscus", "eau", "sucre", "menthe", "arome vanille"],
+    "tags": ["boisson", "frais", "vegetarien", "sans_alcool"],
+    "prix": 3.50,
+    "disponible": true
+  },
+  {
+    "id": "boisson_02",
+    "nom": "Jus de Gingembre Citron",
+    "categorie": "Boissons",
+    "description": "Pur jus de gingembre frais pressé, équilibré par le jus de citron vert et une touche de sucre de canne.",
+    "ingredients": ["gingembre frais", "citron vert", "eau", "sucre de canne"],
+    "tags": ["boisson", "frais", "vegetarien", "sans_alcool"],
+    "prix": 3.50,
+    "disponible": true
+  },
+  {
+    "id": "boisson_03",
+    "nom": "Eau Minérale Plate / Gazeuse (50cl)",
+    "categorie": "Boissons",
+    "description": "Bouteille fraîche d'eau de source naturelle, servie avec glaçons et tranche de citron sur demande.",
+    "ingredients": ["eau minerale"],
+    "tags": ["boisson", "frais", "sans_alcool"],
+    "prix": 2.00,
+    "disponible": true
+  }
+]
