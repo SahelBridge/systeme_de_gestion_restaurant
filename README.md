@@ -37,23 +37,26 @@ Le module **`app_client.py`** fournit une interface intuitive et optimisée pour
 
 ## 🚀 Installation & Exécution
 
-### 1. Cloner le dépôt et se positionner sur la branche `dev-client`
-```bash
-git clone git@github.com:SahelBridge/systeme_de_gestion_restaurant.git
-cd systeme_de_gestion_restaurant
-git checkout dev-client
-```
-
-### 2. Installer les dépendances
+### 1. Installer les dépendances
 ```bash
 pip install -r requirements.txt
 ```
 
-### 3. Lancer l'application Tablette Client
+### 2. Lancer la plateforme de test unifiée (Recommandé)
+Pour tester l'ensemble du système (Tablette Client, Écran Cuisine KDS, Appels Serveur, Statistiques & Stocks) dans une seule interface :
 ```bash
-streamlit run app_client.py
+streamlit run app.py
 ```
-L'interface s'ouvre automatiquement dans votre navigateur à l'adresse `http://localhost:8501`.
+L'interface s'ouvre dans votre navigateur à l'adresse `http://localhost:8501`.
+
+### 3. Lancer les modules de façon autonome
+- **Tablette Client :** `streamlit run app_client.py`
+- **Écran Cuisine KDS :** `streamlit run app_cuisine.py` (ou `streamlit run devcuisine.py`)
+
+### 4. Lancer les tests automatisés
+```bash
+python -m unittest discover
+```
 
 ---
 

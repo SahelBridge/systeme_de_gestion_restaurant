@@ -20,15 +20,15 @@ import uuid
 from datetime import datetime
 import streamlit as st
 
-# =============================================================================
-# 1. Configuration de la page Streamlit (Optimisée pour Tablette Tactile)
-# =============================================================================
-st.set_page_config(
-    page_title="SmartResto - Tablette Client",
-    page_icon="🍽️",
-    layout="wide",
-    initial_sidebar_state="expanded"
-)
+try:
+    st.set_page_config(
+        page_title="SmartResto - Tablette Client",
+        page_icon="🍽️",
+        layout="wide",
+        initial_sidebar_state="expanded"
+    )
+except Exception:
+    pass
 
 # Injection CSS personnalisée pour un design moderne, épuré et adapté au tactile
 st.markdown("""
@@ -173,14 +173,15 @@ st.markdown("""
 # =============================================================================
 # 2. Intégration Robuste des Modules Équipe (Backend API & Database)
 # =============================================================================
-# Importation sécurisée pour garantir le bon fonctionnement même en mode autonome
 try:
+    import api_backend
     from api_backend import process_order as backend_process_order
     HAS_BACKEND_API = True
 except Exception:
     HAS_BACKEND_API = False
 
 try:
+    import database
     from database import save_order as db_save_order, get_active_orders as db_get_active_orders
     HAS_DATABASE = True
 except Exception:
@@ -221,30 +222,34 @@ def executer_commande(table_id: int, order_items: list) -> tuple[bool, dict]:
     """
     Orchestre l'envoi de la commande via l'API backend et la base de données.
     """
-    # 1. Traitement Logique Métier
+    # 1. Traitement Logique Métier via api_backend
     if HAS_BACKEND_API:
         try:
+            # backend_process_order valide les plats, calcule le total et enregistre en base SQLite
             order_details = backend_process_order(table_id, order_items)
+            return (True, order_details)
         except Exception as e:
-            st.warning(f"Note: api_backend a renvoyé une erreur ({e}). Traitement via le moteur intégré.")
+            st.warning(f"Note: api_backend a renvoyé une alerte ({e}). Traitement via moteur autonome.")
             order_details = fallback_process_order(table_id, order_items)
+            succes_db = False
+            if HAS_DATABASE:
+                try:
+                    succes_db = db_save_order(table_id, order_items, order_details.get("total", 0.0), order_id=order_details.get("id"))
+                except Exception:
+                    succes_db = fallback_save_order(table_id, order_items, order_details.get("total", 0.0))
+            else:
+                succes_db = fallback_save_order(table_id, order_items, order_details.get("total", 0.0))
+            return (succes_db, order_details)
+    elif HAS_DATABASE:
+        order_details = fallback_process_order(table_id, order_items)
+        try:
+            succes_db = db_save_order(table_id, order_items, order_details.get("total", 0.0), order_id=order_details.get("id"))
+        except Exception:
+            succes_db = fallback_save_order(table_id, order_items, order_details.get("total", 0.0))
+        return (succes_db, order_details)
     else:
         order_details = fallback_process_order(table_id, order_items)
-
-    total = order_details.get("total", sum(i.get("prix", 0) * i.get("quantite", 1) for i in order_items))
-
-    # 2. Sauvegarde Base de Données
-    succes_db = False
-    if HAS_DATABASE:
-        try:
-            succes_db = db_save_order(table_id, order_items, total)
-        except Exception as e:
-            st.warning(f"Note: database a renvoyé une exception ({e}). Sauvegarde locale effectuée.")
-            succes_db = fallback_save_order(table_id, order_items, total)
-    else:
-        succes_db = fallback_save_order(table_id, order_items, total)
-
-    return (succes_db, order_details)
+        return (True, order_details)
 
 
 # =============================================================================
@@ -275,50 +280,21 @@ if "avis_soumis" not in st.session_state:
 # =============================================================================
 # 4. Chargement des Données du Catalogue (data/menu.json)
 # =============================================================================
-@st.cache_data
 def charger_catalogue_menu() -> list:
-    """Charge le menu depuis le fichier data/menu.json ou retourne le jeu par défaut."""
+    """Charge le catalogue des plats avec prise en compte des ruptures déclarées en cuisine."""
+    if HAS_BACKEND_API:
+        try:
+            return api_backend.load_menu(apply_overrides=True)
+        except Exception:
+            pass
     chemin_menu = os.path.join(os.path.dirname(__file__), "data", "menu.json")
     if os.path.exists(chemin_menu):
         try:
-            with open(chemin_menu, "r", encoding="utf-8") as f:
+            with open(chemin_menu, "r", encoding="utf-8-sig") as f:
                 return json.load(f)
         except Exception as e:
             st.error(f"Erreur de lecture de {chemin_menu}: {e}")
-    
-    # Jeu de données de secours si data/menu.json n'est pas encore disponible
-    return [
-        {
-            "id": "plat_01",
-            "nom": "Steak Frites Maison",
-            "categorie": "Plats Principaux",
-            "description": "Pièce de boeuf tendre grillée, frites maison croustillantes.",
-            "ingredients": ["viande de boeuf", "pommes de terre", "sel"],
-            "tags": ["plat_principal", "viande", "chaud", "halal"],
-            "prix": 15.50,
-            "disponible": true
-        },
-        {
-            "id": "plat_02",
-            "nom": "Thiéboudienne Rouge (Tchep)",
-            "categorie": "Plats Principaux",
-            "description": "Riz rouge sénégalais parfumé, mérou braisé et légumes mijotés.",
-            "ingredients": ["riz", "poisson", "carotte", "manioc", "epices"],
-            "tags": ["plat_principal", "poisson", "chaud", "specialite"],
-            "prix": 14.00,
-            "disponible": true
-        },
-        {
-            "id": "dessert_01",
-            "nom": "Tiramisu Traditionnel",
-            "categorie": "Desserts",
-            "description": "Crème mascarpone légère, biscuits au café expresso, cacao.",
-            "ingredients": ["mascarpone", "cafe", "biscuit", "cacao"],
-            "tags": ["dessert", "sucre", "froid", "vegetarien"],
-            "prix": 6.00,
-            "disponible": true
-        }
-    ]
+    return []
 
 menu_items = charger_catalogue_menu()
 
@@ -455,6 +431,8 @@ with st.container():
         if st.button("💧 Demander de l'eau", use_container_width=True):
             demande = {"table_id": st.session_state.table_id, "type": "Eau", "heure": datetime.now().strftime("%H:%M:%S")}
             st.session_state.appels_serveur.append(demande)
+            if HAS_DATABASE:
+                database.save_server_call(st.session_state.table_id, "Eau")
             st.toast(f"💧 Demande d'eau envoyée pour la Table {st.session_state.table_id} !")
             st.success(f"🛎️ Le serveur a bien été notifié : **Demande d'eau fraîche** pour la Table {st.session_state.table_id}.")
             
@@ -462,6 +440,8 @@ with st.container():
         if st.button("🥖 Demander du pain", use_container_width=True):
             demande = {"table_id": st.session_state.table_id, "type": "Pain", "heure": datetime.now().strftime("%H:%M:%S")}
             st.session_state.appels_serveur.append(demande)
+            if HAS_DATABASE:
+                database.save_server_call(st.session_state.table_id, "Pain")
             st.toast(f"🥖 Corbeille de pain demandée pour la Table {st.session_state.table_id} !")
             st.success(f"🛎️ Le serveur a bien été notifié : **Corbeille de pain** pour la Table {st.session_state.table_id}.")
             
@@ -469,6 +449,8 @@ with st.container():
         if st.button("🧾 Demander l'addition", use_container_width=True):
             demande = {"table_id": st.session_state.table_id, "type": "Addition", "heure": datetime.now().strftime("%H:%M:%S")}
             st.session_state.appels_serveur.append(demande)
+            if HAS_DATABASE:
+                database.save_server_call(st.session_state.table_id, "Addition")
             st.toast(f"🧾 Demande d'addition envoyée pour la Table {st.session_state.table_id} !")
             st.info(f"🛎️ Votre serveur prépare l'addition et se rend à votre Table {st.session_state.table_id}.")
             
@@ -477,8 +459,11 @@ with st.container():
             message_custom = st.text_input("Précisez votre demande :", placeholder="Ex: Serviettes, couverts...")
             if st.button("Envoyer la demande"):
                 if message_custom.strip():
-                    demande = {"table_id": st.session_state.table_id, "type": f"Personnalisé: {message_custom.strip()}", "heure": datetime.now().strftime("%H:%M:%S")}
+                    txt_type = f"Personnalisé: {message_custom.strip()}"
+                    demande = {"table_id": st.session_state.table_id, "type": txt_type, "heure": datetime.now().strftime("%H:%M:%S")}
                     st.session_state.appels_serveur.append(demande)
+                    if HAS_DATABASE:
+                        database.save_server_call(st.session_state.table_id, txt_type)
                     st.toast("Demande personnalisée transmise !")
                     st.success("Votre demande a été envoyée au serveur.")
                 else:
@@ -706,11 +691,22 @@ with tab_avis:
         btn_avis = st.form_submit_button("Envoyer mon Avis & Créditer mes Points", type="primary")
         
         if btn_avis:
+            stars_val = (note_etoiles + 1) if note_etoiles is not None else 5
             pts_gagnes = max(10, st.session_state.points_fidelite_session)
             st.session_state.avis_soumis = True
-            st.success(f"🎉 Merci pour votre retour ! Votre avis a été enregistré avec succès.")
-            if telephone:
-                st.info(f"💎 **Programme Fidélité :** {pts_gagnes} points ont été associés au numéro **{telephone}**.")
+            if HAS_DATABASE:
+                database.save_review(st.session_state.table_id, stars_val, telephone, commentaire)
+                if telephone.strip():
+                    database.save_fidelity_profile(telephone.strip(), pts_gagnes)
+                    solde_total = database.get_fidelity_points(telephone.strip())
+                    st.success("🎉 Merci pour votre avis !")
+                    st.info(f"💎 **Programme Fidélité :** {pts_gagnes} points crédités ! Nouveau solde : **{solde_total} points** (téléphone : {telephone.strip()}).")
+                else:
+                    st.success("🎉 Merci pour votre retour ! Votre avis a été enregistré avec succès.")
+            else:
+                st.success("🎉 Merci pour votre retour ! Votre avis a été enregistré avec succès.")
+                if telephone:
+                    st.info(f"💎 **Programme Fidélité :** {pts_gagnes} points ont été associés au numéro **{telephone}**.")
             st.balloons()
 
 

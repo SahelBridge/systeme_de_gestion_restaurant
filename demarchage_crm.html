@@ -1,0 +1,1577 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRM Démarchage SmartResto - 87 Restaurants Mali</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            background-color: #f4f6f9;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            color: #2c3e50;
+            padding-bottom: 60px;
+        }
+        .header-banner {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 30px 20px;
+            border-radius: 0 0 20px 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .stat-card {
+            background: white;
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            text-align: center;
+            border-bottom: 4px solid #1e3c72;
+            transition: transform 0.2s;
+        }
+        .stat-card:hover {
+            transform: translateY(-3px);
+        }
+        .stat-number {
+            font-size: 28px;
+            font-weight: 700;
+            color: #1e3c72;
+        }
+        .prospect-card {
+            background: white;
+            border-radius: 14px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.04);
+            transition: all 0.2s ease;
+        }
+        .prospect-card:hover {
+            border-color: #93c5fd;
+            box-shadow: 0 6px 18px rgba(30, 60, 114, 0.1);
+        }
+        .badge-offre-saas {
+            background-color: #dbeafe;
+            color: #1e40af;
+            font-weight: 600;
+        }
+        .badge-offre-licence {
+            background-color: #fef3c7;
+            color: #92400e;
+            font-weight: 600;
+        }
+        .badge-quartier {
+            background-color: #f1f5f9;
+            color: #475569;
+            font-weight: 600;
+        }
+        .btn-wa {
+            background-color: #25D366;
+            color: white;
+            font-weight: 600;
+            border: none;
+        }
+        .btn-wa:hover {
+            background-color: #1ebd59;
+            color: white;
+        }
+        .btn-copy {
+            background-color: #f8fafc;
+            color: #475569;
+            border: 1px solid #cbd5e1;
+        }
+        .btn-copy:hover {
+            background-color: #f1f5f9;
+            color: #1e293b;
+        }
+        .status-badge-a_contacter { background-color: #e2e8f0; color: #475569; }
+        .status-badge-envoye { background-color: #fed7aa; color: #9a3412; }
+        .status-badge-rdv { background-color: #bbf7d0; color: #166534; }
+        .status-badge-signe { background-color: #86efac; color: #14532d; font-weight: bold; }
+        .status-badge-non { background-color: #fecaca; color: #991b1b; }
+    </style>
+</head>
+<body>
+
+<div class="header-banner text-center">
+    <div class="container">
+        <h1>🚀 SmartResto - CRM de Démarchage Mali</h1>
+        <p class="lead mb-0">Base de prospection commerciale multi-canal : WhatsApp 1-Clic, Emailing & Suivi des Rendez-vous</p>
+    </div>
+</div>
+
+<div class="container">
+    <!-- STATS BANNER -->
+    <div class="row g-3 mb-4">
+        <div class="col-md-2 col-6">
+            <div class="stat-card" style="border-color: #3b82f6;">
+                <div class="stat-number" id="stat-total">87</div>
+                <small class="text-muted text-uppercase fw-bold">Prospects Totaux</small>
+            </div>
+        </div>
+        <div class="col-md-2 col-6">
+            <div class="stat-card" style="border-color: #f97316;">
+                <div class="stat-number" id="stat-envoyes">0</div>
+                <small class="text-muted text-uppercase fw-bold">Messages Envoyés</small>
+            </div>
+        </div>
+        <div class="col-md-3 col-6">
+            <div class="stat-card" style="border-color: #10b981;">
+                <div class="stat-number" id="stat-rdv">0</div>
+                <small class="text-muted text-uppercase fw-bold">Rendez-vous Fixés</small>
+            </div>
+        </div>
+        <div class="col-md-3 col-6">
+            <div class="stat-card" style="border-color: #059669;">
+                <div class="stat-number" id="stat-signes">0</div>
+                <small class="text-muted text-uppercase fw-bold">Clients Signés 🎉</small>
+            </div>
+        </div>
+        <div class="col-md-2 col-12">
+            <div class="stat-card" style="border-color: #6366f1;">
+                <div class="stat-number" id="stat-taux">0%</div>
+                <small class="text-muted text-uppercase fw-bold">Taux Réponse</small>
+            </div>
+        </div>
+    </div>
+
+    <!-- FILTERS BAR -->
+    <div class="card p-3 mb-4 shadow-sm border-0">
+        <div class="row g-3 align-items-center">
+            <div class="col-md-4">
+                <div class="input-group">
+                    <span class="input-group-text bg-white"><i class="fa fa-search text-muted"></i></span>
+                    <input type="text" id="searchInput" class="form-control" placeholder="Rechercher par nom, quartier ou plat...">
+                </div>
+            </div>
+            <div class="col-md-3">
+                <select id="quartierFilter" class="form-select">
+                    <option value="">Tous les Quartiers / Villes</option>
+                    <option value="Hippodrome">Hippodrome & Quinzambougou</option>
+                    <option value="ACI 2000">ACI 2000 & Hamdallaye</option>
+                    <option value="Badalabougou">Badalabougou & Cité du Niger</option>
+                    <option value="Quartier du Fleuve">Quartier du Fleuve & Centre</option>
+                    <option value="Niaréla">Niaréla & Sotuba</option>
+                    <option value="Ségou">Ségou</option>
+                    <option value="Sikasso">Sikasso</option>
+                    <option value="Mopti">Mopti</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <select id="statusFilter" class="form-select">
+                    <option value="">Tous les Statuts</option>
+                    <option value="a_contacter">⚪ À contacter</option>
+                    <option value="envoye">🟡 Message / Email envoyé</option>
+                    <option value="rdv">🟢 RDV Démo Programmé</option>
+                    <option value="signe">💎 Client Signé</option>
+                    <option value="non">🔴 Pas intéressé</option>
+                </select>
+            </div>
+            <div class="col-md-2 text-end">
+                <button class="btn btn-outline-secondary w-100" onclick="exportData()"><i class="fa fa-download me-1"></i> Exporter</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- PROSPECTS LIST -->
+    <div id="prospectsContainer"></div>
+</div>
+
+<!-- DATA EMBEDDED -->
+<script>
+const PROSPECTS = [{"nom": "Le Bla Bla Bamako", "ville": "Bamako", "quartier": "Hippodrome", "adresse": "Rue Princesse (Rue 234), Hippodrome", "telephone": "+223 66 75 75 27 / +223 20 21 64 64 / +223 76 43 00 00", "email": "restaurantleblabla@gmail.com", "type": "Bar-Restaurant Lounge chic & Tapas", "offre": "SaaS Mensuel", "argument": "Écran KDS cuisine pour fluidifier les commandes en soirée", "custom_pitch": "Bonjour la direction de Le Bla Bla Bamako,
+
+Nous sommes un collectif de 4 jeunes ingénieurs maliens en Intelligence Artificielle (IA) et solutions logicielles, concepteurs du système SmartResto Bamako.
+
+Nous avons développé une solution moderne pensée pour les établissements comme le vôtre (Bar-Restaurant Lounge chic & Tapas) :
+• Écran KDS cuisine pour fluidifier les commandes en soirée
+• Écran cuisine KDS intelligent pour synchroniser la cuisine et supprimer les erreurs
+• 100% autonome en Wi-Fi local sans dépendre des coupures Internet (Orange/Moov)
+• Formule au choix : Abonnement mensuel léger ou Licence à vie définitive.
+
+Seriez-vous disponibles pour que notre équipe passe vous faire une démonstration de 10 minutes sur tablette cette semaine dans votre établissement ?
+
+Bien cordialement,
+L'Équipe Fondatrice SmartResto Bamako
+Contact référent : Ibrahim Tomota (+223 93 23 91 87)", "id": 1, "wa_number": "22366757527"}, {"nom": "Le San Toro", "ville": "Bamako", "quartier": "Hippodrome", "adresse": "169 Route de Koulikoro / Rue 224 Porte 1084", "telephone": "+223 91 31 00 00 / +223 20 21 39 31 / +223 76 45 42 66", "email": "santororestaurant@yahoo.fr", "type": "Gastronomie culturelle malienne & africaine de prestige", "offre": "Licence Perpétuelle", "argument": "Mise en valeur du patrimoine malien avec photos HD sur tablette", "custom_pitch": "Bonjour la direction de Le San Toro,
+
+Nous sommes un collectif de 4 jeunes ingénieurs maliens en Intelligence Artificielle (IA) et solutions logicielles, concepteurs du système SmartResto Bamako.
+
+Nous avons développé une solution moderne pensée pour les établissements comme le vôtre (Gastronomie culturelle malienne & africaine de prestige) :
+• Mise en valeur du patrimoine malien avec photos HD sur tablette
+• Écran cuisine KDS intelligent pour synchroniser la cuisine et supprimer les erreurs
+• 100% autonome en Wi-Fi local sans dépendre des coupures Internet (Orange/Moov)
+• Formule au choix : Abonnement mensuel léger ou Licence à vie définitive.
+
+Seriez-vous disponibles pour que notre équipe passe vous faire une démonstration de 10 minutes sur tablette cette semaine dans votre établissement ?
+
+Bien cordialement,
+L'Équipe Fondatrice SmartResto Bamako
+Contact référent : Ibrahim Tomota (+223 93 23 91 87)", "id": 2, "wa_number": "22391310000"}, {"nom": "Veranda Restaurant Café", "ville": "Bamako", "quartier": "Hippodrome", "adresse": "Rue 214, Porte 297, Rue Princesse", "telephone": "+223 70 71 90 90", "email": "veranda.bko@gmail.com", "type": "Bistro chic, Pâtisserie fine & Brunchs", "offre": "SaaS Mensuel", "argument": "Commande tablette rapide pour les brunchs et déjeuners", "custom_pitch": "Bonjour la direction de Veranda Restaurant Café,
+
+Nous sommes un collectif de 4 jeunes ingénieurs maliens en Intelligence Artificielle (IA) et solutions logicielles, concepteurs du système SmartResto Bamako.
+
+Nous avons développé une solution moderne pensée pour les établissements comme le vôtre (Bistro chic, Pâtisserie fine & Brunchs) :
+• Commande tablette rapide pour les brunchs et déjeuners
+• Écran cuisine KDS intelligent pour synchroniser la cuisine et supprimer les erreurs
+• 100% autonome en Wi-Fi local sans dépendre des coupures Internet (Orange/Moov)
+• Formule au choix : Abonnement mensuel léger ou Licence à vie définitive.
+
+Seriez-vous disponibles pour que notre équipe passe vous faire une démonstration de 10 minutes sur tablette cette semaine dans votre établissement ?
+
+Bien cordialement,
+L'Équipe Fondatrice SmartResto Bamako
+Contact référent : Ibrahim Tomota (+223 93 23 91 87)", "id": 3, "wa_number": "22370719090"}, {"nom": "Le Loft Bamako", "ville": "Bamako", "quartier": "Quinzambougou", "adresse": "687 Rue Achkabad, Quinzambougou", "telephone": "+223 20 21 66 90 / +223 20 21 49 49 / +223 77 77 77 60", "email": "loft@orangemali.net", "type": "Restaurant Lounge contemporain & Dîners festifs", "offre": "SaaS Mensuel", "argument": "Contrôle strict des stocks boissons et anti-coulage bar", "custom_pitch": "Bonjour la direction de Le Loft Bamako,
+
+Nous sommes un collectif de 4 jeunes ingénieurs maliens en Intelligence Artificielle (IA) et solutions logicielles, concepteurs du système SmartResto Bamako.
+
+Nous avons développé une solution moderne pensée pour les établissements comme le vôtre (Restaurant Lounge contemporain & Dîners festifs) :
+• Contrôle strict des stocks boissons et anti-coulage bar
+• Écran cuisine KDS intelligent pour synchroniser la cuisine et supprimer les erreurs
+• 100% autonome en Wi-Fi local sans dépendre des coupures Internet (Orange/Moov)
+• Formule au choix : Abonnement mensuel léger ou Licence à vie définitive.
+
+Seriez-vous disponibles pour que notre équipe passe vous faire une démonstration de 10 minutes sur tablette cette semaine dans votre établissement ?
+
+Bien cordialement,
+L'Équipe Fondatrice SmartResto Bamako
+Contact référent : Ibrahim Tomota (+223 93 23 91 87)", "id": 4, "wa_number": "22377777760"}, {"nom": "Brooklyn Burger Hippodrome", "ville": "Bamako", "quartier": "Hippodrome", "adresse": "Rue Princesse, Hippodrome", "telephone": "+223 78 18 08 08", "email": "brooklynburgerhippodrome@gmail.com", "type": "Fast-Casual, Burgers Gourmet & Frites fraîches", "offre": "SaaS Mensuel", "argument": "KDS pour commandes minute et réduction du temps d'attente", "custom_pitch": "Bonjour la direction de Brooklyn Burger Hippodrome,
+
+Nous sommes un collectif de 4 jeunes ingénieurs maliens en Intelligence Artificielle (IA) et solutions logicielles, concepteurs du système SmartResto Bamako.
+
+Nous avons développé une solution moderne pensée pour les établissements comme le vôtre (Fast-Casual, Burgers Gourmet & Frites fraîches) :
+• KDS pour commandes minute et réduction du temps d'attente
+• Écran cuisine KDS intelligent pour synchroniser la cuisine et supprimer les erreurs
+• 100% autonome en Wi-Fi local sans dépendre des coupures Internet (Orange/Moov)
+• Formule au choix : Abonnement mensuel léger ou Licence à vie définitive.
+
+Seriez-vous disponibles pour que notre équipe passe vous faire une démonstration de 10 minutes sur tablette cette semaine dans votre établissement ?
+
+Bien cordialement,
+L'Équipe Fondatrice SmartResto Bamako
+Contact référent : Ibrahim Tomota (+223 93 23 91 87)", "id": 5, "wa_number": "22378180808"}, {"nom": "Le Campagnard", "ville": "Bamako", "quartier": "Hippodrome / Niaréla", "adresse": "Rue 224, Niaréla / Hippodrome", "telephone": "+223 20 21 92 96 / +223 76 02 11 11", "email": "campagnard.bamako@gmail.com", "type": "Brasserie française & Pizzeria au feu de bois", "offre": "Licence Perpétuelle", "argument": "Synchronisation double cuisine (four à pizza + grill)", "custom_pitch": "Bonjour la direction de Le Campagnard,
+
+Nous sommes un collectif de 4 jeunes ingénieurs maliens en Intelligence Artificielle (IA) et solutions logicielles, concepteurs du système SmartResto Bamako.
+
+Nous avons développé une solution moderne pensée pour les établissements comme le vôtre (Brasserie française & Pizzeria au feu de bois) :
+• Synchronisation double cuisine (four à pizza + grill)
+• Écran cuisine KDS intelligent pour synchroniser la cuisine et supprimer les erreurs
+• 100% autonome en Wi-Fi local sans dépendre des coupures Internet (Orange/Moov)
+• Formule au choix : Abonnement mensuel léger ou Licence à vie définitive.
+
+Seriez-vous disponibles pour que notre équipe passe vous faire une démonstration de 10 minutes sur tablette cette semaine dans votre établissement ?
+
+Bien cordialement,
+L'Équipe Fondatrice SmartResto Bamako
+Contact référent : Ibrahim Tomota (+223 93 23 91 87)", "id": 6, "wa_number": "22376021111"}, {"nom": "Tam-Tam Restaurant", "ville": "Bamako", "quartier": "Hippodrome", "adresse": "Avenue Al Quds / Rue Princesse", "telephone": "+223 20 21 16 00 / +223 76 42 16 16 / +223 20 21 44 48", "email": "tamtam.bamako@orange.mali", "type": "Gastronomie libanaise, méditerranéenne & Pizzeria", "offre": "Licence Perpétuelle", "argument": "Gestion des mezzés multiples par ticket en cuisine", "custom_pitch": "Bonjour la direction de Tam-Tam Restaurant,
+
+Nous sommes un collectif de 4 jeunes ingénieurs maliens en Intelligence Artificielle (IA) et solutions logicielles, concepteurs du système SmartResto Bamako.
+
+Nous avons développé une solution moderne pensée pour les établissements comme le vôtre (Gastronomie libanaise, méditerranéenne & Pizzeria) :
+• Gestion des mezzés multiples par ticket en cuisine
+• Écran cuisine KDS intelligent pour synchroniser la cuisine et supprimer les erreurs
+• 100% autonome en Wi-Fi local sans dépendre des coupures Internet (Orange/Moov)
+• Formule au choix : Abonnement mensuel léger ou Licence à vie définitive.
+
+Seriez-vous disponibles pour que notre équipe passe vous faire une démonstration de 10 minutes sur tablette cette semaine dans votre établissement ?
+
+Bien cordialement,
+L'Équipe Fondatrice SmartResto Bamako
+Contact référent : Ibrahim Tomota (+223 93 23 91 87)", "id": 7, "wa_number": "22376421616"}, {"nom": "Chicago Club Resto", "ville": "Bamako", "quartier": "Hippodrome", "adresse": "Hippodrome", "telephone": "+223 73 65 86 81 / +223 64 78 76 76", "email": "chicagoclubbko@gmail.com", "type": "Resto-Club, Lounge & Cocktails", "offre": "SaaS Mensuel", "argument": "Encaissement rapide et gestion des consommations de nuit", "custom_pitch": "Bonjour la direction de Chicago Club Resto,
+
+Nous sommes un collectif de 4 jeunes ingénieurs maliens en Intelligence Artificielle (IA) et solutions logicielles, concepteurs du système SmartResto Bamako.
+
+Nous avons développé une solution moderne pensée pour les établissements comme le vôtre (Resto-Club, Lounge & Cocktails) :
+• Encaissement rapide et gestion des consommations de nuit
+• Écran cuisine KDS intelligent pour synchroniser la cuisine et supprimer les erreurs
+• 100% autonome en Wi-Fi local sans dépendre des coupures Internet (Orange/Moov)
+• Formule au choix : Abonnement mensuel léger ou Licence à vie définitive.
+
+Seriez-vous disponibles pour que notre équipe passe vous faire une démonstration de 10 minutes sur tablette cette semaine dans votre établissement ?
+
+Bien cordialement,
+L'Équipe Fondatrice SmartResto Bamako
+Contact référent : Ibrahim Tomota (+223 93 23 91 87)", "id": 8, "wa_number": "22373658681"}, {"nom": "N'Ice Cream", "ville": "Bamako", "quartier": "Hippodrome", "adresse": "Rue du Bla-Bla, Hippodrome", "telephone": "+223 94 60 60 60", "email": "contact@nicecream-bamako.com", "type": "Glacier artisanal, Salon de thé & Pâtisserie", "offre": "SaaS Mensuel", "argument": "Caisse tactile rapide et fidélisation par téléphone", "custom_pitch": "Bonjour la direction de N'Ice Cream,
+
+Nous sommes un collectif de 4 jeunes ingénieurs maliens en Intelligence Artificielle (IA) et solutions logicielles, concepteurs du système SmartResto Bamako.
+
+Nous avons développé une solution moderne pensée pour les établissements comme le vôtre (Glacier artisanal, Salon de thé & Pâtisserie) :
+• Caisse tactile rapide et fidélisation par téléphone
+• Écran cuisine KDS intelligent pour synchroniser la cuisine et supprimer les erreurs
+• 100% autonome en Wi-Fi local sans dépendre des coupures Internet (Orange/Moov)
+• Formule au choix : Abonnement mensuel léger ou Licence à vie définitive.
+
+Seriez-vous disponibles pour que notre équipe passe vous faire une démonstration de 10 minutes sur tablette cette semaine dans votre établissement ?
+
+Bien cordialement,
+L'Équipe Fondatrice SmartResto Bamako
+Contact référent : Ibrahim Tomota (+223 93 23 91 87)", "id": 9, "wa_number": "22394606060"}, {"nom": "Restaurant L'Akwaba", "ville": "Bamako", "quartier": "Hippodrome / Centre-ville", "adresse": "Rue Amilcar Cabral, Porte 37", "telephone": "+223 20 21 06 45", "email": "akwaba.bamako@gmail.com", "type": "Spécialités ivoiriennes & africaines (Garba, Alloco)", "offre": "Licence Perpétuelle", "argument": "Suivi des stocks de poissons et volailles du jour", "custom_pitch": "Bonjour la direction de Restaurant L'Akwaba,
+
+Nous sommes un collectif de 4 jeunes ingénieurs maliens en Intelligence Artificielle (IA) et solutions logicielles, concepteurs du système SmartResto Bamako.
+
+Nous avons développé une solution moderne pensée pour les établissements comme le vôtre (Spécialités ivoiriennes & africaines (Garba, Alloco)) :
+• Suivi des stocks de poissons et volailles du jour
+• Écran cuisine KDS intelligent pour synchroniser la cuisine et supprimer les erreurs
+• 100% autonome en Wi-Fi local sans dépendre des coupures Internet (Orange/Moov)
+• Formule au choix : Abonnement mensuel léger ou Licence à vie définitive.
+
+Seriez-vous disponibles pour que notre équipe passe vous faire une démonstration de 10 minutes sur tablette cette semaine dans votre établissement ?
+
+Bien cordialement,
+L'Équipe Fondatrice SmartResto Bamako
+Contact référent : Ibrahim Tomota (+223 93 23 91 87)", "id": 10, "wa_number": ""}, {"nom": "Le Byblos", "ville": "Bamako", "quartier": "Hippodrome", "adresse": "Route de Koulikoro, Hippodrome", "telephone": "+223 20 21 79 18 / +223 20 21 98 40", "email": "byblosbamako@yahoo.fr", "type": "Cuisine libanaise réputée, Mezzés & Grillades", "offre": "Licence Perpétuelle", "argument": "Gestion fluide des tables et des additions séparées", "custom_pitch": "Bonjour la direction de Le Byblos,
+
+Nous sommes un collectif de 4 jeunes ingénieurs maliens en Intelligence Artificielle (IA) et solutions logicielles, concepteurs du système SmartResto Bamako.
+
+Nous avons développé une solution moderne pensée pour les établissements comme le vôtre (Cuisine libanaise réputée, Mezzés & Grillades) :
+• Gestion fluide des tables et des additions séparées
+• Écran cuisine KDS intelligent pour synchroniser la cuisine et supprimer les erreurs
+• 100% autonome en Wi-Fi local sans dépendre des coupures Internet (Orange/Moov)
+• Formule au choix : Abonnement mensuel léger ou Licence à vie définitive.
+
+Seriez-vous disponibles pour que notre équipe passe vous faire une démonstration de 10 minutes sur tablette cette semaine dans votre établissement ?
+
+Bien cordialement,
+L'Équipe Fondatrice SmartResto Bamako
+Contact référent : Ibrahim Tomota (+223 93 23 91 87)", "id": 11, "wa_number": ""}, {"nom": "L'Apostrophe", "ville": "Bamako", "quartier": "Hippodrome", "adresse": "Rue 232, Hippodrome", "telephone": "+223 20 21 34 56 / +223 76 00 22 22", "email": "lapostrophe.bamako@gmail.com", "type": "Bistronomique chic & Bar à vins", "offre": "SaaS Mensuel", "argument": "Suivi précis de la cave et accords mets-vins", "custom_pitch": "Bonjour la direction de L'Apostrophe,
+
+Nous sommes un collectif de 4 jeunes ingénieurs maliens en Intelligence Artificielle (IA) et solutions logicielles, concepteurs du système SmartResto Bamako.
+
+Nous avons développé une solution moderne pensée pour les établissements comme le vôtre (Bistronomique chic & Bar à vins) :
+• Suivi précis de la cave et accords mets-vins
+• Écran cuisine KDS intelligent pour synchroniser la cuisine et supprimer les erreurs
+• 100% autonome en Wi-Fi local sans dépendre des coupures Internet (Orange/Moov)
+• Formule au choix : Abonnement mensuel léger ou Licence à vie définitive.
+
+Seriez-vous disponibles pour que notre équipe passe vous faire une démonstration de 10 minutes sur tablette cette semaine dans votre établissement ?
+
+Bien cordialement,
+L'Équipe Fondatrice SmartResto Bamako
+Contact référent : Ibrahim Tomota (+223 93 23 91 87)", "id": 12, "wa_number": "22376002222"}, {"nom": "La Terrasse", "ville": "Bamako", "quartier": "Hippodrome", "adresse": "Rue Danfaga, Hippodrome", "telephone": "+223 79 07 58 74 / +223 94 48 99 08", "email": "laterrasse.bko@gmail.com", "type": "Bar-Restaurant Lounge & Cuisine internationale", "offre": "SaaS Mensuel", "argument": "Commande sur tablette en terrasse sans attente", "custom_pitch": "Bonjour la direction de La Terrasse,
+
+Nous sommes un collectif de 4 jeunes ingénieurs maliens en Intelligence Artificielle (IA) et solutions logicielles, concepteurs du système SmartResto Bamako.
+
+Nous avons développé une solution moderne pensée pour les établissements comme le vôtre (Bar-Restaurant Lounge & Cuisine internationale) :
+• Commande sur tablette en terrasse sans attente
+• Écran cuisine KDS intelligent pour synchroniser la cuisine et supprimer les erreurs
+• 100% autonome en Wi-Fi local sans dépendre des coupures Internet (Orange/Moov)
+• Formule au choix : Abonnement mensuel léger ou Licence à vie définitive.
+
+Seriez-vous disponibles pour que notre équipe passe vous faire une démonstration de 10 minutes sur tablette cette semaine dans votre établissement ?
+
+Bien cordialement,
+L'Équipe Fondatrice SmartResto Bamako
+Contact référent : Ibrahim Tomota (+223 93 23 91 87)", "id": 13, "wa_number": "22379075874"}, {"nom": "Casablanca Restaurant", "ville": "Bamako", "quartier": "Hippodrome", "adresse": "Avenue Nelson Mandela, Porte 502, Hippodrome", "telephone": "+223 71 71 43 11", "email": "casablanca.bamako@gmail.com", "type": "Cuisine marocaine & Tajines traditionnels", "offre": "Licence Perpétuelle", "argument": "Gestion des temps de cuisson des tajines sur le KDS", "custom_pitch": "Bonjour la direction de Casablanca Restaurant,
+
+Nous sommes un collectif de 4 jeunes ingénieurs maliens en Intelligence Artificielle (IA) et solutions logicielles, concepteurs du système SmartResto Bamako.
+
+Nous avons développé une solution moderne pensée pour les établissements comme le vôtre (Cuisine marocaine & Tajines traditionnels) :
+• Gestion des temps de cuisson des tajines sur le KDS
+• Écran cuisine KDS intelligent pour synchroniser la cuisine et supprimer les erreurs
+• 100% autonome en Wi-Fi local sans dépendre des coupures Internet (Orange/Moov)
+• Formule au choix : Abonnement mensuel léger ou Licence à vie définitive.
+
+Seriez-vous disponibles pour que notre équipe passe vous faire une démonstration de 10 minutes sur tablette cette semaine dans votre établissement ?
+
+Bien cordialement,
+L'Équipe Fondatrice SmartResto Bamako
+Contact référent : Ibrahim Tomota (+223 93 23 91 87)", "id": 14, "wa_number": "22371714311"}, {"nom": "Restaurant Kimchi", "ville": "Bamako", "quartier": "Hippodrome", "adresse": "Hippodrome (près supérette C&C)", "telephone": "+223 75 31 54 95", "email": "kimchibamako@gmail.com", "type": "Cuisine coréenne & Barbecue asiatique traditionnel", "offre": "SaaS Mensuel", "argument": "Personnalisation des sauces et degrés de piment sur tablette", "custom_pitch": "Bonjour la direction de Restaurant Kimchi,
+
+Nous sommes un collectif de 4 jeunes ingénieurs maliens en Intelligence Artificielle (IA) et solutions logicielles, concepteurs du système SmartResto Bamako.
+
+Nous avons développé une solution moderne pensée pour les établissements comme le vôtre (Cuisine coréenne & Barbecue asiatique traditionnel) :
+• Personnalisation des sauces et degrés de piment sur tablette
+• Écran cuisine KDS intelligent pour synchroniser la cuisine et supprimer les erreurs
+• 100% autonome en Wi-Fi local sans dépendre des coupures Internet (Orange/Moov)
+• Formule au choix : Abonnement mensuel léger ou Licence à vie définitive.
+
+Seriez-vous disponibles pour que notre équipe passe vous faire une démonstration de 10 minutes sur tablette cette semaine dans votre établissement ?
+
+Bien cordialement,
+L'Équipe Fondatrice SmartResto Bamako
+Contact référent : Ibrahim Tomota (+223 93 23 91 87)", "id": 15, "wa_number": "22375315495"}, {"nom": "Restaurant 3ème Millénaire", "ville": "Bamako", "quartier": "Hippodrome", "adresse": "Hippodrome", "telephone": "+223 66 74 17 84", "email": "3ememillenaire.bko@gmail.com", "type": "Maquis chic & Restaurant Afro-Fusion", "offre": "Licence Perpétuelle", "argument": "Gestion rapide des boissons et viandes grillées", "custom_pitch": "Bonjour la direction de Restaurant 3ème Millénaire,
+
+Nous sommes un collectif de 4 jeunes ingénieurs maliens en Intelligence Artificielle (IA) et solutions logicielles, concepteurs du système SmartResto Bamako.
+
+Nous avons développé une solution moderne pensée pour les établissements comme le vôtre (Maquis chic & Restaurant Afro-Fusion) :
+• Gestion rapide des boissons et viandes grillées
+• Écran cuisine KDS intelligent pour synchroniser la cuisine et supprimer les erreurs
+• 100% autonome en Wi-Fi local sans dépendre des coupures Internet (Orange/Moov)
+• Formule au choix : Abonnement mensuel léger ou Licence à vie définitive.
+
+Seriez-vous disponibles pour que notre équipe passe vous faire une démonstration de 10 minutes sur tablette cette semaine dans votre établissement ?
+
+Bien cordialement,
+L'Équipe Fondatrice SmartResto Bamako
+Contact référent : Ibrahim Tomota (+223 93 23 91 87)", "id": 16, "wa_number": "22366741784"}, {"nom": "Résidence Palermo Restaurant", "ville": "Bamako", "quartier": "Hippodrome", "adresse": "Rue Blabla (près Miniprix), Hippodrome", "telephone": "+223 70 00 55 33 / +223 82 00 28 00", "email": "palermo.bamako@gmail.com", "type": "Hôtel-restaurant, Spécialités italiennes & pizzas", "offre": "Licence Perpétuelle", "argument": "Facturation directe chambre ou règlement table", "custom_pitch": "Bonjour la direction de Résidence Palermo Restaurant,
+
+Nous sommes un collectif de 4 jeunes ingénieurs maliens en Intelligence Artificielle (IA) et solutions logicielles, concepteurs du système SmartResto Bamako.
+
+Nous avons développé une solution moderne pensée pour les établissements comme le vôtre (Hôtel-restaurant, Spécialités italiennes & pizzas) :
+• Facturation directe chambre ou règlement table
+• Écran cuisine KDS intelligent pour synchroniser la cuisine et supprimer les erreurs
+• 100% autonome en Wi-Fi local sans dépendre des coupures Internet (Orange/Moov)
+• Formule au choix : Abonnement mensuel léger ou Licence à vie définitive.
+
+Seriez-vous disponibles pour que notre équipe passe vous faire une démonstration de 10 minutes sur tablette cette semaine dans votre établissement ?
+
+Bien cordialement,
+L'Équipe Fondatrice SmartResto Bamako
+Contact référent : Ibrahim Tomota (+223 93 23 91 87)", "id": 17, "wa_number": "22370005533"}, {"nom": "Chez Thierry", "ville": "Bamako", "quartier": "Quinzambougou", "adresse": "Rue 548, Quinzambougou", "telephone": "+223 66 42 77 77 / +223 20 21 44 44", "email": "chezthierry.bamako@gmail.com", "type": "Grande table gastronomique française & Dîners VIP", "offre": "Licence Perpétuelle", "argument": "Service discret et transmission silencieuse en cuisine", "custom_pitch": "Bonjour la direction de Chez Thierry,
+
+Nous sommes un collectif de 4 jeunes ingénieurs maliens en Intelligence Artificielle (IA) et solutions logicielles, concepteurs du système SmartResto Bamako.
+
+Nous avons développé une solution moderne pensée pour les établissements comme le vôtre (Grande table gastronomique française & Dîners VIP) :
+• Service discret et transmission silencieuse en cuisine
+• Écran cuisine KDS intelligent pour synchroniser la cuisine et supprimer les erreurs
+• 100% autonome en Wi-Fi local sans dépendre des coupures Internet (Orange/Moov)
+• Formule au choix : Abonnement mensuel léger ou Licence à vie définitive.
+
+Seriez-vous disponibles pour que notre équipe passe vous faire une démonstration de 10 minutes sur tablette cette semaine dans votre établissement ?
+
+Bien cordialement,
+L'Équipe Fondatrice SmartResto Bamako
+Contact référent : Ibrahim Tomota (+223 93 23 91 87)", "id": 18, "wa_number": "22366427777"}, {"nom": "La Rose des Sables", "ville": "Bamako", "quartier": "Hippodrome / Koulikoro", "adresse": "Route de Koulikoro", "telephone": "+223 20 21 04 04", "email": "rosedessables.bko@gmail.com", "type": "Cuisine libanaise, Mezzés & Chawarma", "offre": "SaaS Mensuel", "argument": "Vente au comptoir et en salle unifiée", "custom_pitch": "Bonjour la direction de La Rose des Sables,
+
+Nous sommes un collectif de 4 jeunes ingénieurs maliens en Intelligence Artificielle (IA) et solutions logicielles, concepteurs du système SmartResto Bamako.
+
+Nous avons développé une solution moderne pensée pour les établissements comme le vôtre (Cuisine libanaise, Mezzés & Chawarma) :
+• Vente au comptoir et en salle unifiée
+• Écran cuisine KDS intelligent pour synchroniser la cuisine et supprimer les erreurs
+• 100% autonome en Wi-Fi local sans dépendre des coupures Internet (Orange/Moov)
+• Formule au choix : Abonnement mensuel léger ou Licence à vie définitive.
+
+Seriez-vous disponibles pour que notre équipe passe vous faire une démonstration de 10 minutes sur tablette cette semaine dans votre établissement ?
+
+Bien cordialement,
+L'Équipe Fondatrice SmartResto Bamako
+Contact référent : Ibrahim Tomota (+223 93 23 91 87)", "id": 19, "wa_number": ""}, {"nom": "Restaurant Le Diplomate", "ville": "Bamako", "quartier": "Hippodrome / Koulikoro", "adresse": "Route de Koulikoro", "telephone": "+223 79 06 31 59", "email": "lediplomate.bko@gmail.com", "type": "Cuisine internationale, européenne & libanaise", "offre": "Licence Perpétuelle", "argument": "Menu multilingue et filtres régimes (Halal, Végétarien)", "custom_pitch": "Bonjour la direction de Restaurant Le Diplomate,
+
+Nous sommes un collectif de 4 jeunes ingénieurs maliens en Intelligence Artificielle (IA) et solutions logicielles, concepteurs du système SmartResto Bamako.
+
+Nous avons développé une solution moderne pensée pour les établissements comme le vôtre (Cuisine internationale, européenne & libanaise) :
+• Menu multilingue et filtres régimes (Halal, Végétarien)
+• Écran cuisine KDS intelligent pour synchroniser la cuisine et supprimer les erreurs
+• 100% autonome en Wi-Fi local sans dépendre des coupures Internet (Orange/Moov)
+• Formule au choix : Abonnement mensuel léger ou Licence à vie définitive.
+
+Seriez-vous disponibles pour que notre équipe passe vous faire une démonstration de 10 minutes sur tablette cette semaine dans votre établissement ?
+
+Bien cordialement,
+L'Équipe Fondatrice SmartResto Bamako
+Contact référent : Ibrahim Tomota (+223 93 23 91 87)", "id": 20, "wa_number": "22379063159"}, {"nom": "Le 365", "ville": "Bamako", "quartier": "Hippodrome / Koulikoro", "adresse": "Route de Koulikoro (entre Fourmi et Azar)", "telephone": "+223 20 21 92 96", "email": "le365bamako@gmail.com", "type": "Brasserie moderne & Bar lounge", "offre": "SaaS Mensuel", "argument": "Prise de commande rapide pendant les retransmissions sportives", "custom_pitch": "Bonjour la direction de Le 365,
+
+Nous sommes un collectif de 4 jeunes ingénieurs maliens en Intelligence Artificielle (IA) et solutions logicielles, concepteurs du système SmartResto Bamako.
+
+Nous avons développé une solution moderne pensée pour les établissements comme le vôtre (Brasserie moderne & Bar lounge) :
+• Prise de commande rapide pendant les retransmissions sportives
+• Écran cuisine KDS intelligent pour synchroniser la cuisine et supprimer les erreurs
+• 100% autonome en Wi-Fi local sans dépendre des coupures Internet (Orange/Moov)
+• Formule au choix : Abonnement mensuel léger ou Licence à vie définitive.
+
+Seriez-vous disponibles pour que notre équipe passe vous faire une démonstration de 10 minutes sur tablette cette semaine dans votre établissement ?
+
+Bien cordialement,
+L'Équipe Fondatrice SmartResto Bamako
+Contact référent : Ibrahim Tomota (+223 93 23 91 87)", "id": 21, "wa_number": ""}, {"nom": "Le Savana", "ville": "Bamako", "quartier": "Hippodrome / Koulikoro", "adresse": "1031 Route de Koulikoro", "telephone": "+223 76 31 41 56", "email": "lesavana.bko@gmail.com", "type": "Restaurant plein air & Lounge musical", "offre": "SaaS Mensuel", "argument": "Boutons appel serveur sur chaque table", "custom_pitch": "Bonjour la direction de Le Savana,
+
+Nous sommes un collectif de 4 jeunes ingénieurs maliens en Intelligence Artificielle (IA) et solutions logicielles, concepteurs du système SmartResto Bamako.
+
+Nous avons développé une solution moderne pensée pour les établissements comme le vôtre (Restaurant plein air & Lounge musical) :
+• Boutons appel serveur sur chaque table
+• Écran cuisine KDS intelligent pour synchroniser la cuisine et supprimer les erreurs
+• 100% autonome en Wi-Fi local sans dépendre des coupures Internet (Orange/Moov)
+• Formule au choix : Abonnement mensuel léger ou Licence à vie définitive.
+
+Seriez-vous disponibles pour que notre équipe passe vous faire une démonstration de 10 minutes sur tablette cette semaine dans votre établissement ?
+
+Bien cordialement,
+L'Équipe Fondatrice SmartResto Bamako
+Contact référent : Ibrahim Tomota (+223 93 23 91 87)", "id": 22, "wa_number": "22376314156"}, {"nom": "Le Patio ACI 2000", "ville": "Bamako", "quartier": "ACI 2000", "adresse": "Rue 314, près du Rond-point de l'Obélisque, ACI 2000", "telephone": "+223 20 29 55 55 / +223 76 25 25 25 / +223 66 74 12 12", "email": "patiobamako@gmail.com", "type": "Restaurant Lounge d'Affaires chic & Cuisine fusion", "offre": "SaaS Mensuel", "argument": "Gain de 15 min par table le midi pour les cadres pressés", "custom_pitch": "Bonjour la direction de Le Patio ACI 2000,
+
+Nous sommes un collectif de 4 jeunes ingénieurs maliens en Intelligence Artificielle (IA) et solutions logicielles, concepteurs du système SmartResto Bamako.
+
+Nous avons développé une solution moderne pensée pour les établissements comme le vôtre (Restaurant Lounge d'Affaires chic & Cuisine fusion) :
+• Gain de 15 min par table le midi pour les cadres pressés
+• Écran cuisine KDS intelligent pour synchroniser la cuisine et supprimer les erreurs
+• 100% autonome en Wi-Fi local sans dépendre des coupures Internet (Orange/Moov)
+• Formule au choix : Abonnement mensuel léger ou Licence à vie définitive.
+
+Seriez-vous disponibles pour que notre équipe passe vous faire une démonstration de 10 minutes sur tablette cette semaine dans votre établissement ?
+
+Bien cordialement,
+L'Équipe Fondatrice SmartResto Bamako
+Contact référent : Ibrahim Tomota (+223 93 23 91 87)", "id": 23, "wa_number": "22376252525"}, {"nom": "Garden Bamako", "ville": "Bamako", "quartier": "ACI 2000", "adresse": "Secteur ACI 2000", "telephone": "+223 77 12 21 21", "email": "gardenbko@ofarestauration.com", "type": "Restaurant plein air, Grillades & Bar lounge", "offre": "SaaS Mensuel", "argument": "Appel serveur instantané sur les tables du jardin", "custom_pitch": "Bonjour la direction de Garden Bamako,
+
+Nous sommes un collectif de 4 jeunes ingénieurs maliens en Intelligence Artificielle (IA) et solutions logicielles, concepteurs du système SmartResto Bamako.
+
+Nous avons développé une solution moderne pensée pour les établissements comme le vôtre (Restaurant plein air, Grillades & Bar lounge) :
+• Appel serveur instantané sur les tables du jardin
+• Écran cuisine KDS intelligent pour synchroniser la cuisine et supprimer les erreurs
+• 100% autonome en Wi-Fi local sans dépendre des coupures Internet (Orange/Moov)
+• Formule au choix : Abonnement mensuel léger ou Licence à vie définitive.
+
+Seriez-vous disponibles pour que notre équipe passe vous faire une démonstration de 10 minutes sur tablette cette semaine dans votre établissement ?
+
+Bien cordialement,
+L'Équipe Fondatrice SmartResto Bamako
+Contact référent : Ibrahim Tomota (+223 93 23 91 87)", "id": 24, "wa_number": "22377122121"}, {"nom": "Le Tropikal Resto Buffet", "ville": "Bamako", "quartier": "ACI 2000", "adresse": "ACI 2000", "telephone": "+223 72 00 54 54", "email": "tropikalbko@gmail.com", "type": "Buffet continental & déjeuners d'affaires", "offre": "SaaS Mensuel", "argument": "Comptage des couverts et encaissement express", "custom_pitch": "Bonjour la direction de Le Tropikal Resto Buffet,
+
+Nous sommes un collectif de 4 jeunes ingénieurs maliens en Intelligence Artificielle (IA) et solutions logicielles, concepteurs du système SmartResto Bamako.
+
+Nous avons développé une solution moderne pensée pour les établissements comme le vôtre (Buffet continental & déjeuners d'affaires) :
+• Comptage des couverts et encaissement express
+• Écran cuisine KDS intelligent pour synchroniser la cuisine et supprimer les erreurs
+• 100% autonome en Wi-Fi local sans dépendre des coupures Internet (Orange/Moov)
+• Formule au choix : Abonnement mensuel léger ou Licence à vie définitive.
+
+Seriez-vous disponibles pour que notre équipe passe vous faire une démonstration de 10 minutes sur tablette cette semaine dans votre établissement ?
+
+Bien cordialement,
+L'Équipe Fondatrice SmartResto Bamako
+Contact référent : Ibrahim Tomota (+223 93 23 91 87)", "id": 25, "wa_number": "22372005454"}, {"nom": "L'Escale Gourmande", "ville": "Bamako", "quartier": "ACI 2000", "adresse": "Avenue Cheick Zayed, ACI 2000", "telephone": "+223 70 25 77 77 / +223 75 02 25 25", "email": "lescalegourmandebko@gmail.com", "type": "Brasserie moderne & Dîners d'affaires", "offre": "Licence Perpétuelle", "argument": "Clôture de caisse infalsifiable et fiches recettes", "custom_pitch": "Bonjour la direction de L'Escale Gourmande,
+
+Nous sommes un collectif de 4 jeunes ingénieurs maliens en Intelligence Artificielle (IA) et solutions logicielles, concepteurs du système SmartResto Bamako.
+
+Nous avons développé une solution moderne pensée pour les établissements comme le vôtre (Brasserie moderne & Dîners d'affaires) :
+• Clôture de caisse infalsifiable et fiches recettes
+• Écran cuisine KDS intelligent pour synchroniser la cuisine et supprimer les erreurs
+• 100% autonome en Wi-Fi local sans dépendre des coupures Internet (Orange/Moov)
+• Formule au choix : Abonnement mensuel léger ou Licence à vie définitive.
+
+Seriez-vous disponibles pour que notre équipe passe vous faire une démonstration de 10 minutes sur tablette cette semaine dans votre établissement ?
+
+Bien cordialement,
+L'Équipe Fondatrice SmartResto Bamako
+Contact référent : Ibrahim Tomota (+223 93 23 91 87)", "id": 26, "wa_number": "22370257777"}, {"nom": "GAÏA Restaurant", "ville": "Bamako", "quartier": "ACI 2000", "adresse": "ACI 2000", "telephone": "+223 90 64 00 00", "email": "gaia.aci2000@gmail.com", "type": "Gastronomie moderne & Cadre feutré", "offre": "SaaS Mensuel", "argument": "Expérience client premium sur tablette tactile élégante", "custom_pitch": "Bonjour la direction de GAÏA Restaurant,
+
+Nous sommes un collectif de 4 jeunes ingénieurs maliens en Intelligence Artificielle (IA) et solutions logicielles, concepteurs du système SmartResto Bamako.
+
+Nous avons développé une solution moderne pensée pour les établissements comme le vôtre (Gastronomie moderne & Cadre feutré) :
+• Expérience client premium sur tablette tactile élégante
+• Écran cuisine KDS intelligent pour synchroniser la cuisine et supprimer les erreurs
+• 100% autonome en Wi-Fi local sans dépendre des coupures Internet (Orange/Moov)
+• Formule au choix : Abonnement mensuel léger ou Licence à vie définitive.
+
+Seriez-vous disponibles pour que notre équipe passe vous faire une démonstration de 10 minutes sur tablette cette semaine dans votre établissement ?
+
+Bien cordialement,
+L'Équipe Fondatrice SmartResto Bamako
+Contact référent : Ibrahim Tomota (+223 93 23 91 87)", "id": 27, "wa_number": "22390640000"}, {"nom": "Dunia Hotel Restaurant", "ville": "Bamako", "quartier": "ACI 2000", "adresse": "Cité Administrative, ACI 2000", "telephone": "+223 44 98 19 40", "email": "receptiondhbaci@azalaihotels.com", "type": "Restaurant d'hôtel d'affaires & séminaires", "offre": "Licence Entreprise On-Premise", "argument": "Multi-caisses et facturation entreprise / proforma", "custom_pitch": "Bonjour la direction de Dunia Hotel Restaurant,
+
+Nous sommes un collectif de 4 jeunes ingénieurs maliens en Intelligence Artificielle (IA) et solutions logicielles, concepteurs du système SmartResto Bamako.
+
+Nous avons développé une solution moderne pensée pour les établissements comme le vôtre (Restaurant d'hôtel d'affaires & séminaires) :
+• Multi-caisses et facturation entreprise / proforma
+• Écran cuisine KDS intelligent pour synchroniser la cuisine et supprimer les erreurs
+• 100% autonome en Wi-Fi local sans dépendre des coupures Internet (Orange/Moov)
+• Formule au choix : Abonnement mensuel léger ou Licence à vie définitive.
+
+Seriez-vous disponibles pour que notre équipe passe vous faire une démonstration de 10 minutes sur tablette cette semaine dans votre établissement ?
+
+Bien cordialement,
+L'Équipe Fondatrice SmartResto Bamako
+Contact référent : Ibrahim Tomota (+223 93 23 91 87)", "id": 28, "wa_number": ""}, {"nom": "Les Jardins d'Asie", "ville": "Bamako", "quartier": "ACI 2000", "adresse": "Rue 380, près Siège BMS, ACI 2000", "telephone": "+223 20 29 23 23 / +223 76 10 50 50", "email": "jardinsdasie.bamako@gmail.com", "type": "Gastronomie asiatique, Teppanyaki & Sushis", "offre": "Licence Perpétuelle", "argument": "Organisation KDS séparée entre sushis et cuisine au wok", "custom_pitch": "Bonjour la direction de Les Jardins d'Asie,
+
+Nous sommes un collectif de 4 jeunes ingénieurs maliens en Intelligence Artificielle (IA) et solutions logicielles, concepteurs du système SmartResto Bamako.
+
+Nous avons développé une solution moderne pensée pour les établissements comme le vôtre (Gastronomie asiatique, Teppanyaki & Sushis) :
+• Organisation KDS séparée entre sushis et cuisine au wok
+• Écran cuisine KDS intelligent pour synchroniser la cuisine et supprimer les erreurs
+• 100% autonome en Wi-Fi local sans dépendre des coupures Internet (Orange/Moov)
+• Formule au choix : Abonnement mensuel léger ou Licence à vie définitive.
+
+Seriez-vous disponibles pour que notre équipe passe vous faire une démonstration de 10 minutes sur tablette cette semaine dans votre établissement ?
+
+Bien cordialement,
+L'Équipe Fondatrice SmartResto Bamako
+Contact référent : Ibrahim Tomota (+223 93 23 91 87)", "id": 29, "wa_number": "22376105050"}, {"nom": "Woodpecker Burgers", "ville": "Bamako", "quartier": "ACI 2000", "adresse": "Rue 320, ACI 2000", "telephone": "+223 20 29 70 00 / +223 74 55 55 44", "email": "woodpecker.bamako@gmail.com", "type": "Fast-food gourmet & Milkshakes", "offre": "SaaS Mensuel", "argument": "Minutage KDS vert/orange/rouge pour commandes < 6 min", "custom_pitch": "Bonjour la direction de Woodpecker Burgers,
+
+Nous sommes un collectif de 4 jeunes ingénieurs maliens en Intelligence Artificielle (IA) et solutions logicielles, concepteurs du système SmartResto Bamako.
+
+Nous avons développé une solution moderne pensée pour les établissements comme le vôtre (Fast-food gourmet & Milkshakes) :
+• Minutage KDS vert/orange/rouge pour commandes < 6 min
+• Écran cuisine KDS intelligent pour synchroniser la cuisine et supprimer les erreurs
+• 100% autonome en Wi-Fi local sans dépendre des coupures Internet (Orange/Moov)
+• Formule au choix : Abonnement mensuel léger ou Licence à vie définitive.
+
+Seriez-vous disponibles pour que notre équipe passe vous faire une démonstration de 10 minutes sur tablette cette semaine dans votre établissement ?
+
+Bien cordialement,
+L'Équipe Fondatrice SmartResto Bamako
+Contact référent : Ibrahim Tomota (+223 93 23 91 87)", "id": 30, "wa_number": "22374555544"}, {"nom": "Marinas Place CAN", "ville": "Bamako", "quartier": "ACI 2000", "adresse": "Place CAN, ACI 2000", "telephone": "+223 73 38 88 88 / +223 74 40 00 00", "email": "marinas.placecan@gmail.com", "type": "Pâtisserie, Fast-food chic & Spécialités libanaises", "offre": "SaaS Mensuel", "argument": "Gestion conjointe de la vente à emporter et sur table", "custom_pitch": "Bonjour la direction de Marinas Place CAN,
+
+Nous sommes un collectif de 4 jeunes ingénieurs maliens en Intelligence Artificielle (IA) et solutions logicielles, concepteurs du système SmartResto Bamako.
+
+Nous avons développé une solution moderne pensée pour les établissements comme le vôtre (Pâtisserie, Fast-food chic & Spécialités libanaises) :
+• Gestion conjointe de la vente à emporter et sur table
+• Écran cuisine KDS intelligent pour synchroniser la cuisine et supprimer les erreurs
+• 100% autonome en Wi-Fi local sans dépendre des coupures Internet (Orange/Moov)
+• Formule au choix : Abonnement mensuel léger ou Licence à vie définitive.
+
+Seriez-vous disponibles pour que notre équipe passe vous faire une démonstration de 10 minutes sur tablette cette semaine dans votre établissement ?
+
+Bien cordialement,
+L'Équipe Fondatrice SmartResto Bamako
+Contact référent : Ibrahim Tomota (+223 93 23 91 87)", "id": 31, "wa_number": "22373388888"}, {"nom": "Guaduman Restaurant", "ville": "Bamako", "quartier": "ACI 2000", "adresse": "Place CAN, ACI 2000", "telephone": "+223 78 78 78 79 / +223 74 74 52 52", "email": "guaduman.bamako@gmail.com", "type": "Gastronomie africaine & Buffet de standing", "offre": "Licence Perpétuelle", "argument": "Maîtrise des coûts matières et gestion des événements", "custom_pitch": "Bonjour la direction de Guaduman Restaurant,
+
+Nous sommes un collectif de 4 jeunes ingénieurs maliens en Intelligence Artificielle (IA) et solutions logicielles, concepteurs du système SmartResto Bamako.
+
+Nous avons développé une solution moderne pensée pour les établissements comme le vôtre (Gastronomie africaine & Buffet de standing) :
+• Maîtrise des coûts matières et gestion des événements
+• Écran cuisine KDS intelligent pour synchroniser la cuisine et supprimer les erreurs
+• 100% autonome en Wi-Fi local sans dépendre des coupures Internet (Orange/Moov)
+• Formule au choix : Abonnement mensuel léger ou Licence à vie définitive.
+
+Seriez-vous disponibles pour que notre équipe passe vous faire une démonstration de 10 minutes sur tablette cette semaine dans votre établissement ?
+
+Bien cordialement,
+L'Équipe Fondatrice SmartResto Bamako
+Contact référent : Ibrahim Tomota (+223 93 23 91 87)", "id": 32, "wa_number": "22378787879"}, {"nom": "Addis Fusion Ethiopian Cuisine", "ville": "Bamako", "quartier": "ACI 2000", "adresse": "Hamdallaye ACI 2000", "telephone": "+223 82 39 75 36", "email": "addisfusion@gmail.com", "type": "Gastronomie éthiopienne & afro-fusion", "offre": "SaaS Mensuel", "argument": "Personnalisation des plateaux partagés sur tablette", "custom_pitch": "Bonjour la direction de Addis Fusion Ethiopian Cuisine,
+
+Nous sommes un collectif de 4 jeunes ingénieurs maliens en Intelligence Artificielle (IA) et solutions logicielles, concepteurs du système SmartResto Bamako.
+
+Nous avons développé une solution moderne pensée pour les établissements comme le vôtre (Gastronomie éthiopienne & afro-fusion) :
+• Personnalisation des plateaux partagés sur tablette
+• Écran cuisine KDS intelligent pour synchroniser la cuisine et supprimer les erreurs
+• 100% autonome en Wi-Fi local sans dépendre des coupures Internet (Orange/Moov)
+• Formule au choix : Abonnement mensuel léger ou Licence à vie définitive.
+
+Seriez-vous disponibles pour que notre équipe passe vous faire une démonstration de 10 minutes sur tablette cette semaine dans votre établissement ?
+
+Bien cordialement,
+L'Équipe Fondatrice SmartResto Bamako
+Contact référent : Ibrahim Tomota (+223 93 23 91 87)", "id": 33, "wa_number": "22382397536"}, {"nom": "Bamako Kitchen", "ville": "Bamako", "quartier": "ACI 2000", "adresse": "Hamdallaye ACI 2000", "telephone": "+223 76 32 64 24", "email": "bamakokitchen@gmail.com", "type": "Cuisine urbaine, Snacks gourmets & Livraison", "offre": "SaaS Mensuel", "argument": "Gestion des tickets de préparation à emporter", "custom_pitch": "Bonjour la direction de Bamako Kitchen,
+
+Nous sommes un collectif de 4 jeunes ingénieurs maliens en Intelligence Artificielle (IA) et solutions logicielles, concepteurs du système SmartResto Bamako.
+
+Nous avons développé une solution moderne pensée pour les établissements comme le vôtre (Cuisine urbaine, Snacks gourmets & Livraison) :
+• Gestion des tickets de préparation à emporter
+• Écran cuisine KDS intelligent pour synchroniser la cuisine et supprimer les erreurs
+• 100% autonome en Wi-Fi local sans dépendre des coupures Internet (Orange/Moov)
+• Formule au choix : Abonnement mensuel léger ou Licence à vie définitive.
+
+Seriez-vous disponibles pour que notre équipe passe vous faire une démonstration de 10 minutes sur tablette cette semaine dans votre établissement ?
+
+Bien cordialement,
+L'Équipe Fondatrice SmartResto Bamako
+Contact référent : Ibrahim Tomota (+223 93 23 91 87)", "id": 34, "wa_number": "22376326424"}, {"nom": "Le Spot ACI", "ville": "Bamako", "quartier": "ACI 2000", "adresse": "Route Bibliothèque Nationale, ACI 2000", "telephone": "+223 75 75 04 75", "email": "lespot.aci@gmail.com", "type": "Lounge branché, Burgers & Grillades", "offre": "SaaS Mensuel", "argument": "Appel serveur flottant pour commandes de boissons rapides", "custom_pitch": "Bonjour la direction de Le Spot ACI,
+
+Nous sommes un collectif de 4 jeunes ingénieurs maliens en Intelligence Artificielle (IA) et solutions logicielles, concepteurs du système SmartResto Bamako.
+
+Nous avons développé une solution moderne pensée pour les établissements comme le vôtre (Lounge branché, Burgers & Grillades) :
+• Appel serveur flottant pour commandes de boissons rapides
+• Écran cuisine KDS intelligent pour synchroniser la cuisine et supprimer les erreurs
+• 100% autonome en Wi-Fi local sans dépendre des coupures Internet (Orange/Moov)
+• Formule au choix : Abonnement mensuel léger ou Licence à vie définitive.
+
+Seriez-vous disponibles pour que notre équipe passe vous faire une démonstration de 10 minutes sur tablette cette semaine dans votre établissement ?
+
+Bien cordialement,
+L'Équipe Fondatrice SmartResto Bamako
+Contact référent : Ibrahim Tomota (+223 93 23 91 87)", "id": 35, "wa_number": "22375750475"}, {"nom": "ABFC Fast Food", "ville": "Bamako", "quartier": "ACI 2000", "adresse": "Secteur ACI 2000", "telephone": "+223 67 76 11 09", "email": "abfc.bamako@gmail.com", "type": "Fast-Food Poulet frit, Burgers & Frites", "offre": "SaaS Mensuel", "argument": "File d'attente numérique et impression ticket client", "custom_pitch": "Bonjour la direction de ABFC Fast Food,
+
+Nous sommes un collectif de 4 jeunes ingénieurs maliens en Intelligence Artificielle (IA) et solutions logicielles, concepteurs du système SmartResto Bamako.
+
+Nous avons développé une solution moderne pensée pour les établissements comme le vôtre (Fast-Food Poulet frit, Burgers & Frites) :
+• File d'attente numérique et impression ticket client
+• Écran cuisine KDS intelligent pour synchroniser la cuisine et supprimer les erreurs
+• 100% autonome en Wi-Fi local sans dépendre des coupures Internet (Orange/Moov)
+• Formule au choix : Abonnement mensuel léger ou Licence à vie définitive.
+
+Seriez-vous disponibles pour que notre équipe passe vous faire une démonstration de 10 minutes sur tablette cette semaine dans votre établissement ?
+
+Bien cordialement,
+L'Équipe Fondatrice SmartResto Bamako
+Contact référent : Ibrahim Tomota (+223 93 23 91 87)", "id": 36, "wa_number": "22367761109"}, {"nom": "Ô Buffet", "ville": "Bamako", "quartier": "ACI 2000", "adresse": "ACI 2000", "telephone": "+223 70 00 70 70", "email": "obuffet.bko@gmail.com", "type": "Buffet à volonté & Restauration rapide le midi", "offre": "SaaS Mensuel", "argument": "Facturation automatique au forfait buffet", "custom_pitch": "Bonjour la direction de Ô Buffet,
+
+Nous sommes un collectif de 4 jeunes ingénieurs maliens en Intelligence Artificielle (IA) et solutions logicielles, concepteurs du système SmartResto Bamako.
+
+Nous avons développé une solution moderne pensée pour les établissements comme le vôtre (Buffet à volonté & Restauration rapide le midi) :
+• Facturation automatique au forfait buffet
+• Écran cuisine KDS intelligent pour synchroniser la cuisine et supprimer les erreurs
+• 100% autonome en Wi-Fi local sans dépendre des coupures Internet (Orange/Moov)
+• Formule au choix : Abonnement mensuel léger ou Licence à vie définitive.
+
+Seriez-vous disponibles pour que notre équipe passe vous faire une démonstration de 10 minutes sur tablette cette semaine dans votre établissement ?
+
+Bien cordialement,
+L'Équipe Fondatrice SmartResto Bamako
+Contact référent : Ibrahim Tomota (+223 93 23 91 87)", "id": 37, "wa_number": "22370007070"}, {"nom": "Vieille Marmite", "ville": "Bamako", "quartier": "ACI 2000", "adresse": "ACI 2000 Hamdallaye", "telephone": "+223 90 60 20 20", "email": "vieillemarmite@gmail.com", "type": "Cuisine traditionnelle malienne & Déjeuners cadres", "offre": "Licence Perpétuelle", "argument": "Suivi des marmites du jour et alertes ruptures", "custom_pitch": "Bonjour la direction de Vieille Marmite,
+
+Nous sommes un collectif de 4 jeunes ingénieurs maliens en Intelligence Artificielle (IA) et solutions logicielles, concepteurs du système SmartResto Bamako.
+
+Nous avons développé une solution moderne pensée pour les établissements comme le vôtre (Cuisine traditionnelle malienne & Déjeuners cadres) :
+• Suivi des marmites du jour et alertes ruptures
+• Écran cuisine KDS intelligent pour synchroniser la cuisine et supprimer les erreurs
+• 100% autonome en Wi-Fi local sans dépendre des coupures Internet (Orange/Moov)
+• Formule au choix : Abonnement mensuel léger ou Licence à vie définitive.
+
+Seriez-vous disponibles pour que notre équipe passe vous faire une démonstration de 10 minutes sur tablette cette semaine dans votre établissement ?
+
+Bien cordialement,
+L'Équipe Fondatrice SmartResto Bamako
+Contact référent : Ibrahim Tomota (+223 93 23 91 87)", "id": 38, "wa_number": "22390602020"}, {"nom": "Restaurant Isabella", "ville": "Bamako", "quartier": "Badalabougou", "adresse": "Rue 50, Badalabougou", "telephone": "+223 76 48 51 46", "email": "restaurantisabella01@gmail.com", "type": "Gastronomie italienne, Pâtes fraîches & Poissons fins", "offre": "Licence Perpétuelle", "argument": "Fiches techniques recettes pour préserver la rentabilité", "custom_pitch": "Bonjour la direction de Restaurant Isabella,
+
+Nous sommes un collectif de 4 jeunes ingénieurs maliens en Intelligence Artificielle (IA) et solutions logicielles, concepteurs du système SmartResto Bamako.
+
+Nous avons développé une solution moderne pensée pour les établissements comme le vôtre (Gastronomie italienne, Pâtes fraîches & Poissons fins) :
+• Fiches techniques recettes pour préserver la rentabilité
+• Écran cuisine KDS intelligent pour synchroniser la cuisine et supprimer les erreurs
+• 100% autonome en Wi-Fi local sans dépendre des coupures Internet (Orange/Moov)
+• Formule au choix : Abonnement mensuel léger ou Licence à vie définitive.
+
+Seriez-vous disponibles pour que notre équipe passe vous faire une démonstration de 10 minutes sur tablette cette semaine dans votre établissement ?
+
+Bien cordialement,
+L'Équipe Fondatrice SmartResto Bamako
+Contact référent : Ibrahim Tomota (+223 93 23 91 87)", "id": 39, "wa_number": "22376485146"}, {"nom": "Badalodge Restaurant", "ville": "Bamako", "quartier": "Kalabambougou", "adresse": "Kalabambougou (au bord du Niger)", "telephone": "+223 65 96 06 06", "email": "contact@badalodge.com", "type": "Éco-Lodge de standing, Pizzas au feu de bois & Terrasse fleuve", "offre": "Licence Perpétuelle", "argument": "Fonctionnement Wi-Fi autonome longue portée pour grande terrasse", "custom_pitch": "Bonjour la direction de Badalodge Restaurant,
+
+Nous sommes un collectif de 4 jeunes ingénieurs maliens en Intelligence Artificielle (IA) et solutions logicielles, concepteurs du système SmartResto Bamako.
+
+Nous avons développé une solution moderne pensée pour les établissements comme le vôtre (Éco-Lodge de standing, Pizzas au feu de bois & Terrasse fleuve) :
+• Fonctionnement Wi-Fi autonome longue portée pour grande terrasse
+• Écran cuisine KDS intelligent pour synchroniser la cuisine et supprimer les erreurs
+• 100% autonome en Wi-Fi local sans dépendre des coupures Internet (Orange/Moov)
+• Formule au choix : Abonnement mensuel léger ou Licence à vie définitive.
+
+Seriez-vous disponibles pour que notre équipe passe vous faire une démonstration de 10 minutes sur tablette cette semaine dans votre établissement ?
+
+Bien cordialement,
+L'Équipe Fondatrice SmartResto Bamako
+Contact référent : Ibrahim Tomota (+223 93 23 91 87)", "id": 40, "wa_number": "22365960606"}, {"nom": "L'Amandine / Sel et Miel", "ville": "Bamako", "quartier": "Badalabougou", "adresse": "Avenue de l'OUA, Badalabougou", "telephone": "+223 76 35 99 99 / +223 71 76 99 69", "email": "amandinebamako@yahoo.fr", "type": "Pâtisserie fine, Salon de thé & Brasserie française", "offre": "SaaS Mensuel", "argument": "Suivi des stocks d'ingrédients de boulangerie/pâtisserie", "custom_pitch": "Bonjour la direction de L'Amandine / Sel et Miel,
+
+Nous sommes un collectif de 4 jeunes ingénieurs maliens en Intelligence Artificielle (IA) et solutions logicielles, concepteurs du système SmartResto Bamako.
+
+Nous avons développé une solution moderne pensée pour les établissements comme le vôtre (Pâtisserie fine, Salon de thé & Brasserie française) :
+• Suivi des stocks d'ingrédients de boulangerie/pâtisserie
+• Écran cuisine KDS intelligent pour synchroniser la cuisine et supprimer les erreurs
+• 100% autonome en Wi-Fi local sans dépendre des coupures Internet (Orange/Moov)
+• Formule au choix : Abonnement mensuel léger ou Licence à vie définitive.
+
+Seriez-vous disponibles pour que notre équipe passe vous faire une démonstration de 10 minutes sur tablette cette semaine dans votre établissement ?
+
+Bien cordialement,
+L'Équipe Fondatrice SmartResto Bamako
+Contact référent : Ibrahim Tomota (+223 93 23 91 87)", "id": 41, "wa_number": "22376359999"}, {"nom": "Broadway Café Badala", "ville": "Bamako", "quartier": "Badalabougou", "adresse": "Avenue de l'OUA, Badalabougou", "telephone": "+223 20 22 00 22 / +223 76 99 99 88", "email": "contact@broadwaycafe-bamako.com", "type": "Diner américain, Pizzas & Desserts gourmands", "offre": "SaaS Mensuel", "argument": "Tablette tactile sur chaque banquette pour commander soi-même", "custom_pitch": "Bonjour la direction de Broadway Café Badala,
+
+Nous sommes un collectif de 4 jeunes ingénieurs maliens en Intelligence Artificielle (IA) et solutions logicielles, concepteurs du système SmartResto Bamako.
+
+Nous avons développé une solution moderne pensée pour les établissements comme le vôtre (Diner américain, Pizzas & Desserts gourmands) :
+• Tablette tactile sur chaque banquette pour commander soi-même
+• Écran cuisine KDS intelligent pour synchroniser la cuisine et supprimer les erreurs
+• 100% autonome en Wi-Fi local sans dépendre des coupures Internet (Orange/Moov)
+• Formule au choix : Abonnement mensuel léger ou Licence à vie définitive.
+
+Seriez-vous disponibles pour que notre équipe passe vous faire une démonstration de 10 minutes sur tablette cette semaine dans votre établissement ?
+
+Bien cordialement,
+L'Équipe Fondatrice SmartResto Bamako
+Contact référent : Ibrahim Tomota (+223 93 23 91 87)", "id": 42, "wa_number": "22376999988"}, {"nom": "Badala Hotel-Restaurant", "ville": "Bamako", "quartier": "Badalabougou", "adresse": "Rue 15, Porte 152 B, Badalabougou Est", "telephone": "+223 20 23 23 15", "email": "badalahotel@orangemali.net", "type": "Hôtel-restaurant de charme avec jardin tropical", "offre": "Licence Perpétuelle", "argument": "Facturation chambre ou règlement immédiat en salle", "custom_pitch": "Bonjour la direction de Badala Hotel-Restaurant,
+
+Nous sommes un collectif de 4 jeunes ingénieurs maliens en Intelligence Artificielle (IA) et solutions logicielles, concepteurs du système SmartResto Bamako.
+
+Nous avons développé une solution moderne pensée pour les établissements comme le vôtre (Hôtel-restaurant de charme avec jardin tropical) :
+• Facturation chambre ou règlement immédiat en salle
+• Écran cuisine KDS intelligent pour synchroniser la cuisine et supprimer les erreurs
+• 100% autonome en Wi-Fi local sans dépendre des coupures Internet (Orange/Moov)
+• Formule au choix : Abonnement mensuel léger ou Licence à vie définitive.
+
+Seriez-vous disponibles pour que notre équipe passe vous faire une démonstration de 10 minutes sur tablette cette semaine dans votre établissement ?
+
+Bien cordialement,
+L'Équipe Fondatrice SmartResto Bamako
+Contact référent : Ibrahim Tomota (+223 93 23 91 87)", "id": 43, "wa_number": ""}, {"nom": "Jaopraya Thai Cuisine", "ville": "Bamako", "quartier": "Badalabougou", "adresse": "Boulevard du 22 Octobre, Badalabougou", "telephone": "+223 20 23 44 56", "email": "jaopraya.bamako@gmail.com", "type": "Haute gastronomie thaïlandaise & asiatique", "offre": "Licence Perpétuelle", "argument": "Options d'épices et d'allergies gérées sur la tablette client", "custom_pitch": "Bonjour la direction de Jaopraya Thai Cuisine,
+
+Nous sommes un collectif de 4 jeunes ingénieurs maliens en Intelligence Artificielle (IA) et solutions logicielles, concepteurs du système SmartResto Bamako.
+
+Nous avons développé une solution moderne pensée pour les établissements comme le vôtre (Haute gastronomie thaïlandaise & asiatique) :
+• Options d'épices et d'allergies gérées sur la tablette client
+• Écran cuisine KDS intelligent pour synchroniser la cuisine et supprimer les erreurs
+• 100% autonome en Wi-Fi local sans dépendre des coupures Internet (Orange/Moov)
+• Formule au choix : Abonnement mensuel léger ou Licence à vie définitive.
+
+Seriez-vous disponibles pour que notre équipe passe vous faire une démonstration de 10 minutes sur tablette cette semaine dans votre établissement ?
+
+Bien cordialement,
+L'Équipe Fondatrice SmartResto Bamako
+Contact référent : Ibrahim Tomota (+223 93 23 91 87)", "id": 44, "wa_number": ""}, {"nom": "Restaurant La Méditerranée", "ville": "Bamako", "quartier": "Badalabougou", "adresse": "Rue Gamal Abdel Nasser, Badalabougou", "telephone": "+223 66 79 19 53", "email": "lamediterranee.bko@gmail.com", "type": "Cuisine méditerranéenne & Poissons grillés", "offre": "Licence Perpétuelle", "argument": "Mise à jour instantanée des poissons du jour disponibles", "custom_pitch": "Bonjour la direction de Restaurant La Méditerranée,
+
+Nous sommes un collectif de 4 jeunes ingénieurs maliens en Intelligence Artificielle (IA) et solutions logicielles, concepteurs du système SmartResto Bamako.
+
+Nous avons développé une solution moderne pensée pour les établissements comme le vôtre (Cuisine méditerranéenne & Poissons grillés) :
+• Mise à jour instantanée des poissons du jour disponibles
+• Écran cuisine KDS intelligent pour synchroniser la cuisine et supprimer les erreurs
+• 100% autonome en Wi-Fi local sans dépendre des coupures Internet (Orange/Moov)
+• Formule au choix : Abonnement mensuel léger ou Licence à vie définitive.
+
+Seriez-vous disponibles pour que notre équipe passe vous faire une démonstration de 10 minutes sur tablette cette semaine dans votre établissement ?
+
+Bien cordialement,
+L'Équipe Fondatrice SmartResto Bamako
+Contact référent : Ibrahim Tomota (+223 93 23 91 87)", "id": 45, "wa_number": "22366791953"}, {"nom": "Villa Soudan", "ville": "Bamako", "quartier": "Badalabougou", "adresse": "Badalabougou Ouest, Rue 50 Porte 1058", "telephone": "+223 20 22 88 46", "email": "villasoudan@gmail.com", "type": "Hôtel de charme & Restaurant gastronomique de bord de fleuve", "offre": "Licence Perpétuelle", "argument": "Gestion des repas VIP et notes de dégustation", "custom_pitch": "Bonjour la direction de Villa Soudan,
+
+Nous sommes un collectif de 4 jeunes ingénieurs maliens en Intelligence Artificielle (IA) et solutions logicielles, concepteurs du système SmartResto Bamako.
+
+Nous avons développé une solution moderne pensée pour les établissements comme le vôtre (Hôtel de charme & Restaurant gastronomique de bord de fleuve) :
+• Gestion des repas VIP et notes de dégustation
+• Écran cuisine KDS intelligent pour synchroniser la cuisine et supprimer les erreurs
+• 100% autonome en Wi-Fi local sans dépendre des coupures Internet (Orange/Moov)
+• Formule au choix : Abonnement mensuel léger ou Licence à vie définitive.
+
+Seriez-vous disponibles pour que notre équipe passe vous faire une démonstration de 10 minutes sur tablette cette semaine dans votre établissement ?
+
+Bien cordialement,
+L'Équipe Fondatrice SmartResto Bamako
+Contact référent : Ibrahim Tomota (+223 93 23 91 87)", "id": 46, "wa_number": ""}, {"nom": "Restaurant Hôtel Mandé", "ville": "Bamako", "quartier": "Cité du Niger", "adresse": "Berges du Niger, Cité du Niger", "telephone": "+223 20 22 58 84 / +223 76 43 00 11 / +223 20 21 19 93", "email": "reservation@hotelmande.com", "type": "Hôtel 4 étoiles, Capitaine braisé & Terrasse panoramique", "offre": "Licence Perpétuelle", "argument": "Transmission sans fil vers cuisine évitant la marche des serveurs", "custom_pitch": "Bonjour la direction de Restaurant Hôtel Mandé,
+
+Nous sommes un collectif de 4 jeunes ingénieurs maliens en Intelligence Artificielle (IA) et solutions logicielles, concepteurs du système SmartResto Bamako.
+
+Nous avons développé une solution moderne pensée pour les établissements comme le vôtre (Hôtel 4 étoiles, Capitaine braisé & Terrasse panoramique) :
+• Transmission sans fil vers cuisine évitant la marche des serveurs
+• Écran cuisine KDS intelligent pour synchroniser la cuisine et supprimer les erreurs
+• 100% autonome en Wi-Fi local sans dépendre des coupures Internet (Orange/Moov)
+• Formule au choix : Abonnement mensuel léger ou Licence à vie définitive.
+
+Seriez-vous disponibles pour que notre équipe passe vous faire une démonstration de 10 minutes sur tablette cette semaine dans votre établissement ?
+
+Bien cordialement,
+L'Équipe Fondatrice SmartResto Bamako
+Contact référent : Ibrahim Tomota (+223 93 23 91 87)", "id": 47, "wa_number": "22376430011"}, {"nom": "Restaurant Sibérie", "ville": "Bamako", "quartier": "Cité du Niger", "adresse": "Cité du Niger", "telephone": "+223 20 79 26 30", "email": "siberie.bamako@gmail.com", "type": "Restaurant lounge au calme & grillades", "offre": "SaaS Mensuel", "argument": "Commande sur tablette et fidélité client", "custom_pitch": "Bonjour la direction de Restaurant Sibérie,
+
+Nous sommes un collectif de 4 jeunes ingénieurs maliens en Intelligence Artificielle (IA) et solutions logicielles, concepteurs du système SmartResto Bamako.
+
+Nous avons développé une solution moderne pensée pour les établissements comme le vôtre (Restaurant lounge au calme & grillades) :
+• Commande sur tablette et fidélité client
+• Écran cuisine KDS intelligent pour synchroniser la cuisine et supprimer les erreurs
+• 100% autonome en Wi-Fi local sans dépendre des coupures Internet (Orange/Moov)
+• Formule au choix : Abonnement mensuel léger ou Licence à vie définitive.
+
+Seriez-vous disponibles pour que notre équipe passe vous faire une démonstration de 10 minutes sur tablette cette semaine dans votre établissement ?
+
+Bien cordialement,
+L'Équipe Fondatrice SmartResto Bamako
+Contact référent : Ibrahim Tomota (+223 93 23 91 87)", "id": 48, "wa_number": ""}, {"nom": "Radisson Collection Hotel (City Grill & Oasis)", "ville": "Bamako", "quartier": "Quartier du Fleuve", "adresse": "Rue 250, Quartier du Fleuve", "telephone": "+223 20 70 52 52 / +223 20 70 50 00", "email": "info.bamako@radissoncollection.com", "type": "Hôtel 5 étoiles luxe, City Grill & Restaurant piscine", "offre": "Licence Entreprise", "argument": "Contrôle strict des normes de traçabilité et anti-gaspillage", "custom_pitch": "Bonjour la direction de Radisson Collection Hotel (City Grill & Oasis),
+
+Nous sommes un collectif de 4 jeunes ingénieurs maliens en Intelligence Artificielle (IA) et solutions logicielles, concepteurs du système SmartResto Bamako.
+
+Nous avons développé une solution moderne pensée pour les établissements comme le vôtre (Hôtel 5 étoiles luxe, City Grill & Restaurant piscine) :
+• Contrôle strict des normes de traçabilité et anti-gaspillage
+• Écran cuisine KDS intelligent pour synchroniser la cuisine et supprimer les erreurs
+• 100% autonome en Wi-Fi local sans dépendre des coupures Internet (Orange/Moov)
+• Formule au choix : Abonnement mensuel léger ou Licence à vie définitive.
+
+Seriez-vous disponibles pour que notre équipe passe vous faire une démonstration de 10 minutes sur tablette cette semaine dans votre établissement ?
+
+Bien cordialement,
+L'Équipe Fondatrice SmartResto Bamako
+Contact référent : Ibrahim Tomota (+223 93 23 91 87)", "id": 49, "wa_number": ""}, {"nom": "Azalaï Hôtel Salam (Le Nomad)", "ville": "Bamako", "quartier": "Quartier du Fleuve", "adresse": "Avenue du Mali, face Palais de la Culture", "telephone": "+223 44 90 49 44 / +223 76 34 87 30 / +223 20 70 00 00", "email": "reservationahs@azalaihotels.com", "type": "Palace 5 étoiles, Restaurant Afro-Fusion & Banquets", "offre": "Licence Entreprise", "argument": "Synchronisation banquets/séminaires et multi-caisses bar/resto", "custom_pitch": "Bonjour la direction de Azalaï Hôtel Salam (Le Nomad),
+
+Nous sommes un collectif de 4 jeunes ingénieurs maliens en Intelligence Artificielle (IA) et solutions logicielles, concepteurs du système SmartResto Bamako.
+
+Nous avons développé une solution moderne pensée pour les établissements comme le vôtre (Palace 5 étoiles, Restaurant Afro-Fusion & Banquets) :
+• Synchronisation banquets/séminaires et multi-caisses bar/resto
+• Écran cuisine KDS intelligent pour synchroniser la cuisine et supprimer les erreurs
+• 100% autonome en Wi-Fi local sans dépendre des coupures Internet (Orange/Moov)
+• Formule au choix : Abonnement mensuel léger ou Licence à vie définitive.
+
+Seriez-vous disponibles pour que notre équipe passe vous faire une démonstration de 10 minutes sur tablette cette semaine dans votre établissement ?
+
+Bien cordialement,
+L'Équipe Fondatrice SmartResto Bamako
+Contact référent : Ibrahim Tomota (+223 93 23 91 87)", "id": 50, "wa_number": "22376348730"}, {"nom": "Azalaï Grand Hôtel (Gourmet)", "ville": "Bamako", "quartier": "Centre-Ville", "adresse": "Rue de la Liberté, Centre-Ville", "telephone": "+223 20 22 24 92 / +223 20 22 24 81", "email": "reservationagh@azalaihotels.com", "type": "Hôtel historique colonial & Gastronomie européenne-africaine", "offre": "Licence Entreprise", "argument": "Gestion des droits serveurs et sécurisation des encaissements", "custom_pitch": "Bonjour la direction de Azalaï Grand Hôtel (Gourmet),
+
+Nous sommes un collectif de 4 jeunes ingénieurs maliens en Intelligence Artificielle (IA) et solutions logicielles, concepteurs du système SmartResto Bamako.
+
+Nous avons développé une solution moderne pensée pour les établissements comme le vôtre (Hôtel historique colonial & Gastronomie européenne-africaine) :
+• Gestion des droits serveurs et sécurisation des encaissements
+• Écran cuisine KDS intelligent pour synchroniser la cuisine et supprimer les erreurs
+• 100% autonome en Wi-Fi local sans dépendre des coupures Internet (Orange/Moov)
+• Formule au choix : Abonnement mensuel léger ou Licence à vie définitive.
+
+Seriez-vous disponibles pour que notre équipe passe vous faire une démonstration de 10 minutes sur tablette cette semaine dans votre établissement ?
+
+Bien cordialement,
+L'Équipe Fondatrice SmartResto Bamako
+Contact référent : Ibrahim Tomota (+223 93 23 91 87)", "id": 51, "wa_number": ""}, {"nom": "Laico Hôtel de l'Amitié (La Table du Chef & Djoliba)", "ville": "Bamako", "quartier": "Bozola / Centre-Ville", "adresse": "Avenue de la Marne, Bozola", "telephone": "+223 44 97 53 00 / +223 20 21 43 21", "email": "reservations@hotel-lamitie.com", "type": "Hôtel 5 étoiles, Gastronomie française & Spécialités africaines", "offre": "Licence Entreprise", "argument": "Supervision multi-salles en temps réel pour F&B manager", "custom_pitch": "Bonjour la direction de Laico Hôtel de l'Amitié (La Table du Chef & Djoliba),
+
+Nous sommes un collectif de 4 jeunes ingénieurs maliens en Intelligence Artificielle (IA) et solutions logicielles, concepteurs du système SmartResto Bamako.
+
+Nous avons développé une solution moderne pensée pour les établissements comme le vôtre (Hôtel 5 étoiles, Gastronomie française & Spécialités africaines) :
+• Supervision multi-salles en temps réel pour F&B manager
+• Écran cuisine KDS intelligent pour synchroniser la cuisine et supprimer les erreurs
+• 100% autonome en Wi-Fi local sans dépendre des coupures Internet (Orange/Moov)
+• Formule au choix : Abonnement mensuel léger ou Licence à vie définitive.
+
+Seriez-vous disponibles pour que notre équipe passe vous faire une démonstration de 10 minutes sur tablette cette semaine dans votre établissement ?
+
+Bien cordialement,
+L'Équipe Fondatrice SmartResto Bamako
+Contact référent : Ibrahim Tomota (+223 93 23 91 87)", "id": 52, "wa_number": ""}, {"nom": "ONOMO Hotel Restaurant", "ville": "Bamako", "quartier": "Quartier du Fleuve", "adresse": "Rue 110, Fleuve", "telephone": "+223 20 70 62 00", "email": "onomo.bamako@onomohotel.com", "type": "Hôtel contemporain, Restaurant grillades & Bar piscine", "offre": "SaaS Mensuel", "argument": "Prise de commande rapide en bord de piscine", "custom_pitch": "Bonjour la direction de ONOMO Hotel Restaurant,
+
+Nous sommes un collectif de 4 jeunes ingénieurs maliens en Intelligence Artificielle (IA) et solutions logicielles, concepteurs du système SmartResto Bamako.
+
+Nous avons développé une solution moderne pensée pour les établissements comme le vôtre (Hôtel contemporain, Restaurant grillades & Bar piscine) :
+• Prise de commande rapide en bord de piscine
+• Écran cuisine KDS intelligent pour synchroniser la cuisine et supprimer les erreurs
+• 100% autonome en Wi-Fi local sans dépendre des coupures Internet (Orange/Moov)
+• Formule au choix : Abonnement mensuel léger ou Licence à vie définitive.
+
+Seriez-vous disponibles pour que notre équipe passe vous faire une démonstration de 10 minutes sur tablette cette semaine dans votre établissement ?
+
+Bien cordialement,
+L'Équipe Fondatrice SmartResto Bamako
+Contact référent : Ibrahim Tomota (+223 93 23 91 87)", "id": 53, "wa_number": ""}, {"nom": "L'Appaloosa Restaurant Fleuve", "ville": "Bamako", "quartier": "Quartier du Fleuve", "adresse": "Rue 311, Quartier du Fleuve", "telephone": "+223 76 66 99 99 / +223 20 22 15 14", "email": "appaloosabamako@gmail.com", "type": "Grillades fines & Bar western", "offre": "Licence Perpétuelle", "argument": "Suivi des degrés de cuisson des viandes en cuisine", "custom_pitch": "Bonjour la direction de L'Appaloosa Restaurant Fleuve,
+
+Nous sommes un collectif de 4 jeunes ingénieurs maliens en Intelligence Artificielle (IA) et solutions logicielles, concepteurs du système SmartResto Bamako.
+
+Nous avons développé une solution moderne pensée pour les établissements comme le vôtre (Grillades fines & Bar western) :
+• Suivi des degrés de cuisson des viandes en cuisine
+• Écran cuisine KDS intelligent pour synchroniser la cuisine et supprimer les erreurs
+• 100% autonome en Wi-Fi local sans dépendre des coupures Internet (Orange/Moov)
+• Formule au choix : Abonnement mensuel léger ou Licence à vie définitive.
+
+Seriez-vous disponibles pour que notre équipe passe vous faire une démonstration de 10 minutes sur tablette cette semaine dans votre établissement ?
+
+Bien cordialement,
+L'Équipe Fondatrice SmartResto Bamako
+Contact référent : Ibrahim Tomota (+223 93 23 91 87)", "id": 54, "wa_number": "22376669999"}, {"nom": "Restaurant Bol de Jade", "ville": "Bamako", "quartier": "Quartier du Fleuve", "adresse": "Quartier du Fleuve, BP 1574", "telephone": "+223 20 22 63 03", "email": "boldejade.bamako@gmail.com", "type": "Restaurant asiatique & vietnamien historique de Bamako", "offre": "Licence Perpétuelle", "argument": "Affichage clair des spécialités asiatiques sur écran KDS", "custom_pitch": "Bonjour la direction de Restaurant Bol de Jade,
+
+Nous sommes un collectif de 4 jeunes ingénieurs maliens en Intelligence Artificielle (IA) et solutions logicielles, concepteurs du système SmartResto Bamako.
+
+Nous avons développé une solution moderne pensée pour les établissements comme le vôtre (Restaurant asiatique & vietnamien historique de Bamako) :
+• Affichage clair des spécialités asiatiques sur écran KDS
+• Écran cuisine KDS intelligent pour synchroniser la cuisine et supprimer les erreurs
+• 100% autonome en Wi-Fi local sans dépendre des coupures Internet (Orange/Moov)
+• Formule au choix : Abonnement mensuel léger ou Licence à vie définitive.
+
+Seriez-vous disponibles pour que notre équipe passe vous faire une démonstration de 10 minutes sur tablette cette semaine dans votre établissement ?
+
+Bien cordialement,
+L'Équipe Fondatrice SmartResto Bamako
+Contact référent : Ibrahim Tomota (+223 93 23 91 87)", "id": 55, "wa_number": ""}, {"nom": "Soukhothai", "ville": "Bamako", "quartier": "Quartier du Fleuve", "adresse": "Rue 311, Quartier du Fleuve", "telephone": "+223 20 22 24 48", "email": "soukhothai.bamako@gmail.com", "type": "Cuisine thaïlandaise authentique", "offre": "Licence Perpétuelle", "argument": "Fiches allergènes (cacahuètes, soja) sur tablette client", "custom_pitch": "Bonjour la direction de Soukhothai,
+
+Nous sommes un collectif de 4 jeunes ingénieurs maliens en Intelligence Artificielle (IA) et solutions logicielles, concepteurs du système SmartResto Bamako.
+
+Nous avons développé une solution moderne pensée pour les établissements comme le vôtre (Cuisine thaïlandaise authentique) :
+• Fiches allergènes (cacahuètes, soja) sur tablette client
+• Écran cuisine KDS intelligent pour synchroniser la cuisine et supprimer les erreurs
+• 100% autonome en Wi-Fi local sans dépendre des coupures Internet (Orange/Moov)
+• Formule au choix : Abonnement mensuel léger ou Licence à vie définitive.
+
+Seriez-vous disponibles pour que notre équipe passe vous faire une démonstration de 10 minutes sur tablette cette semaine dans votre établissement ?
+
+Bien cordialement,
+L'Équipe Fondatrice SmartResto Bamako
+Contact référent : Ibrahim Tomota (+223 93 23 91 87)", "id": 56, "wa_number": ""}, {"nom": "Restaurant L'Olympien", "ville": "Bamako", "quartier": "Quartier du Fleuve", "adresse": "Quartier du Fleuve, BP E 3478", "telephone": "+223 20 23 87 93", "email": "lolympien.bamako@gmail.com", "type": "Brasserie traditionnelle & Poissons du jour", "offre": "Licence Perpétuelle", "argument": "Gestion simplifiée des additions et des habitués", "custom_pitch": "Bonjour la direction de Restaurant L'Olympien,
+
+Nous sommes un collectif de 4 jeunes ingénieurs maliens en Intelligence Artificielle (IA) et solutions logicielles, concepteurs du système SmartResto Bamako.
+
+Nous avons développé une solution moderne pensée pour les établissements comme le vôtre (Brasserie traditionnelle & Poissons du jour) :
+• Gestion simplifiée des additions et des habitués
+• Écran cuisine KDS intelligent pour synchroniser la cuisine et supprimer les erreurs
+• 100% autonome en Wi-Fi local sans dépendre des coupures Internet (Orange/Moov)
+• Formule au choix : Abonnement mensuel léger ou Licence à vie définitive.
+
+Seriez-vous disponibles pour que notre équipe passe vous faire une démonstration de 10 minutes sur tablette cette semaine dans votre établissement ?
+
+Bien cordialement,
+L'Équipe Fondatrice SmartResto Bamako
+Contact référent : Ibrahim Tomota (+223 93 23 91 87)", "id": 57, "wa_number": ""}, {"nom": "Restaurant La Castellane", "ville": "Bamako", "quartier": "Quartier du Fleuve", "adresse": "Rue 311, Porte 211, Quartier du Fleuve", "telephone": "+223 74 70 92 82", "email": "lacastellane.bamako@gmail.com", "type": "Gastronomie française raffinée & Cave à vin", "offre": "Licence Perpétuelle", "argument": "Valorisation des suggestions du chef sur tablette tactile", "custom_pitch": "Bonjour la direction de Restaurant La Castellane,
+
+Nous sommes un collectif de 4 jeunes ingénieurs maliens en Intelligence Artificielle (IA) et solutions logicielles, concepteurs du système SmartResto Bamako.
+
+Nous avons développé une solution moderne pensée pour les établissements comme le vôtre (Gastronomie française raffinée & Cave à vin) :
+• Valorisation des suggestions du chef sur tablette tactile
+• Écran cuisine KDS intelligent pour synchroniser la cuisine et supprimer les erreurs
+• 100% autonome en Wi-Fi local sans dépendre des coupures Internet (Orange/Moov)
+• Formule au choix : Abonnement mensuel léger ou Licence à vie définitive.
+
+Seriez-vous disponibles pour que notre équipe passe vous faire une démonstration de 10 minutes sur tablette cette semaine dans votre établissement ?
+
+Bien cordialement,
+L'Équipe Fondatrice SmartResto Bamako
+Contact référent : Ibrahim Tomota (+223 93 23 91 87)", "id": 58, "wa_number": "22374709282"}, {"nom": "Restaurant La Pirogue", "ville": "Bamako", "quartier": "Quartier du Fleuve", "adresse": "Berges du Niger, Quartier du Fleuve", "telephone": "+223 66 71 08 24", "email": "lapiroguemali@yahoo.fr", "type": "Poissons frais du Niger (Capitaine braisé) & Barbecue", "offre": "Licence Perpétuelle", "argument": "Gestion des poids et portions de poissons du jour", "custom_pitch": "Bonjour la direction de Restaurant La Pirogue,
+
+Nous sommes un collectif de 4 jeunes ingénieurs maliens en Intelligence Artificielle (IA) et solutions logicielles, concepteurs du système SmartResto Bamako.
+
+Nous avons développé une solution moderne pensée pour les établissements comme le vôtre (Poissons frais du Niger (Capitaine braisé) & Barbecue) :
+• Gestion des poids et portions de poissons du jour
+• Écran cuisine KDS intelligent pour synchroniser la cuisine et supprimer les erreurs
+• 100% autonome en Wi-Fi local sans dépendre des coupures Internet (Orange/Moov)
+• Formule au choix : Abonnement mensuel léger ou Licence à vie définitive.
+
+Seriez-vous disponibles pour que notre équipe passe vous faire une démonstration de 10 minutes sur tablette cette semaine dans votre établissement ?
+
+Bien cordialement,
+L'Équipe Fondatrice SmartResto Bamako
+Contact référent : Ibrahim Tomota (+223 93 23 91 87)", "id": 59, "wa_number": "22366710824"}, {"nom": "Arc en Ciel", "ville": "Bamako", "quartier": "Centre Commercial", "adresse": "Siège PMU Mali, Centre Commercial", "telephone": "+223 66 74 47 87", "email": "arcenciel.pmu@gmail.com", "type": "Brasserie de centre-ville & Déjeuners express", "offre": "SaaS Mensuel", "argument": "Encaissement ultra-rapide aux heures de pointe", "custom_pitch": "Bonjour la direction de Arc en Ciel,
+
+Nous sommes un collectif de 4 jeunes ingénieurs maliens en Intelligence Artificielle (IA) et solutions logicielles, concepteurs du système SmartResto Bamako.
+
+Nous avons développé une solution moderne pensée pour les établissements comme le vôtre (Brasserie de centre-ville & Déjeuners express) :
+• Encaissement ultra-rapide aux heures de pointe
+• Écran cuisine KDS intelligent pour synchroniser la cuisine et supprimer les erreurs
+• 100% autonome en Wi-Fi local sans dépendre des coupures Internet (Orange/Moov)
+• Formule au choix : Abonnement mensuel léger ou Licence à vie définitive.
+
+Seriez-vous disponibles pour que notre équipe passe vous faire une démonstration de 10 minutes sur tablette cette semaine dans votre établissement ?
+
+Bien cordialement,
+L'Équipe Fondatrice SmartResto Bamako
+Contact référent : Ibrahim Tomota (+223 93 23 91 87)", "id": 60, "wa_number": "22366744787"}, {"nom": "African Grill Bozola", "ville": "Bamako", "quartier": "Bozola / Coura", "adresse": "Quartier Coura / Bozola", "telephone": "+223 20 23 28 34 / +223 66 74 45 06", "email": "africangrill.mali@gmail.com", "type": "Maquis grillades de référence (Dibi agneau, Poulet braisé)", "offre": "Licence Perpétuelle", "argument": "Gestion au kilo/portion de viande et contrôle des stocks", "custom_pitch": "Bonjour la direction de African Grill Bozola,
+
+Nous sommes un collectif de 4 jeunes ingénieurs maliens en Intelligence Artificielle (IA) et solutions logicielles, concepteurs du système SmartResto Bamako.
+
+Nous avons développé une solution moderne pensée pour les établissements comme le vôtre (Maquis grillades de référence (Dibi agneau, Poulet braisé)) :
+• Gestion au kilo/portion de viande et contrôle des stocks
+• Écran cuisine KDS intelligent pour synchroniser la cuisine et supprimer les erreurs
+• 100% autonome en Wi-Fi local sans dépendre des coupures Internet (Orange/Moov)
+• Formule au choix : Abonnement mensuel léger ou Licence à vie définitive.
+
+Seriez-vous disponibles pour que notre équipe passe vous faire une démonstration de 10 minutes sur tablette cette semaine dans votre établissement ?
+
+Bien cordialement,
+L'Équipe Fondatrice SmartResto Bamako
+Contact référent : Ibrahim Tomota (+223 93 23 91 87)", "id": 61, "wa_number": "22366744506"}, {"nom": "Hôtel Restaurant Panda", "ville": "Bamako", "quartier": "Niaréla", "adresse": "Rue 461, Porte 372, Niaréla", "telephone": "+223 76 13 22 80", "email": "hotelpanda.bamako@gmail.com", "type": "Hôtel-restaurant, Cuisine chinoise authentique", "offre": "Licence Perpétuelle", "argument": "Affichage bilingue des plats sur tablette", "custom_pitch": "Bonjour la direction de Hôtel Restaurant Panda,
+
+Nous sommes un collectif de 4 jeunes ingénieurs maliens en Intelligence Artificielle (IA) et solutions logicielles, concepteurs du système SmartResto Bamako.
+
+Nous avons développé une solution moderne pensée pour les établissements comme le vôtre (Hôtel-restaurant, Cuisine chinoise authentique) :
+• Affichage bilingue des plats sur tablette
+• Écran cuisine KDS intelligent pour synchroniser la cuisine et supprimer les erreurs
+• 100% autonome en Wi-Fi local sans dépendre des coupures Internet (Orange/Moov)
+• Formule au choix : Abonnement mensuel léger ou Licence à vie définitive.
+
+Seriez-vous disponibles pour que notre équipe passe vous faire une démonstration de 10 minutes sur tablette cette semaine dans votre établissement ?
+
+Bien cordialement,
+L'Équipe Fondatrice SmartResto Bamako
+Contact référent : Ibrahim Tomota (+223 93 23 91 87)", "id": 62, "wa_number": "22376132280"}, {"nom": "Restaurant La Marée", "ville": "Bamako", "quartier": "Niaréla", "adresse": "Rue 461, Porte 130, Niaréla", "telephone": "+223 20 21 05 63", "email": "lamaree.bamako@gmail.com", "type": "Poissons, Fruits de mer & Cuisine raffinée", "offre": "Licence Perpétuelle", "argument": "Gestion des arrivages quotidiens de marée", "custom_pitch": "Bonjour la direction de Restaurant La Marée,
+
+Nous sommes un collectif de 4 jeunes ingénieurs maliens en Intelligence Artificielle (IA) et solutions logicielles, concepteurs du système SmartResto Bamako.
+
+Nous avons développé une solution moderne pensée pour les établissements comme le vôtre (Poissons, Fruits de mer & Cuisine raffinée) :
+• Gestion des arrivages quotidiens de marée
+• Écran cuisine KDS intelligent pour synchroniser la cuisine et supprimer les erreurs
+• 100% autonome en Wi-Fi local sans dépendre des coupures Internet (Orange/Moov)
+• Formule au choix : Abonnement mensuel léger ou Licence à vie définitive.
+
+Seriez-vous disponibles pour que notre équipe passe vous faire une démonstration de 10 minutes sur tablette cette semaine dans votre établissement ?
+
+Bien cordialement,
+L'Équipe Fondatrice SmartResto Bamako
+Contact référent : Ibrahim Tomota (+223 93 23 91 87)", "id": 63, "wa_number": ""}, {"nom": "Restaurant Namasté India", "ville": "Bamako", "quartier": "Niaréla", "adresse": "Rue 461, Porte 47, Niaréla", "telephone": "+223 77 31 88 27", "email": "namaste.bamako@gmail.com", "type": "Gastronomie indienne (Tandoori, Biryani, Currys)", "offre": "SaaS Mensuel", "argument": "Personnalisation des niveaux d'épices sur tablette", "custom_pitch": "Bonjour la direction de Restaurant Namasté India,
+
+Nous sommes un collectif de 4 jeunes ingénieurs maliens en Intelligence Artificielle (IA) et solutions logicielles, concepteurs du système SmartResto Bamako.
+
+Nous avons développé une solution moderne pensée pour les établissements comme le vôtre (Gastronomie indienne (Tandoori, Biryani, Currys)) :
+• Personnalisation des niveaux d'épices sur tablette
+• Écran cuisine KDS intelligent pour synchroniser la cuisine et supprimer les erreurs
+• 100% autonome en Wi-Fi local sans dépendre des coupures Internet (Orange/Moov)
+• Formule au choix : Abonnement mensuel léger ou Licence à vie définitive.
+
+Seriez-vous disponibles pour que notre équipe passe vous faire une démonstration de 10 minutes sur tablette cette semaine dans votre établissement ?
+
+Bien cordialement,
+L'Équipe Fondatrice SmartResto Bamako
+Contact référent : Ibrahim Tomota (+223 93 23 91 87)", "id": 64, "wa_number": "22377318827"}, {"nom": "Restaurant Saisons", "ville": "Bamako", "quartier": "Niaréla", "adresse": "Rue 461, Porte 273, Niaréla", "telephone": "+223 20 21 70 85", "email": "saisons.bamako@gmail.com", "type": "Gastronomie fine & Dîners d'affaires discrets", "offre": "Licence Perpétuelle", "argument": "Calcul automatique du coût matière des menus dégustation", "custom_pitch": "Bonjour la direction de Restaurant Saisons,
+
+Nous sommes un collectif de 4 jeunes ingénieurs maliens en Intelligence Artificielle (IA) et solutions logicielles, concepteurs du système SmartResto Bamako.
+
+Nous avons développé une solution moderne pensée pour les établissements comme le vôtre (Gastronomie fine & Dîners d'affaires discrets) :
+• Calcul automatique du coût matière des menus dégustation
+• Écran cuisine KDS intelligent pour synchroniser la cuisine et supprimer les erreurs
+• 100% autonome en Wi-Fi local sans dépendre des coupures Internet (Orange/Moov)
+• Formule au choix : Abonnement mensuel léger ou Licence à vie définitive.
+
+Seriez-vous disponibles pour que notre équipe passe vous faire une démonstration de 10 minutes sur tablette cette semaine dans votre établissement ?
+
+Bien cordialement,
+L'Équipe Fondatrice SmartResto Bamako
+Contact référent : Ibrahim Tomota (+223 93 23 91 87)", "id": 65, "wa_number": ""}, {"nom": "Restaurant Kondjira KTZ", "ville": "Bamako", "quartier": "Niaréla - N'Golonina", "adresse": "Niaréla - N'Golonina", "telephone": "+223 20 21 86 86", "email": "kondjira.ktz@gmail.com", "type": "Cuisine malienne traditionnelle & Traiteur réceptions", "offre": "Licence Perpétuelle", "argument": "Gestion des grands volumes et commandes traiteur", "custom_pitch": "Bonjour la direction de Restaurant Kondjira KTZ,
+
+Nous sommes un collectif de 4 jeunes ingénieurs maliens en Intelligence Artificielle (IA) et solutions logicielles, concepteurs du système SmartResto Bamako.
+
+Nous avons développé une solution moderne pensée pour les établissements comme le vôtre (Cuisine malienne traditionnelle & Traiteur réceptions) :
+• Gestion des grands volumes et commandes traiteur
+• Écran cuisine KDS intelligent pour synchroniser la cuisine et supprimer les erreurs
+• 100% autonome en Wi-Fi local sans dépendre des coupures Internet (Orange/Moov)
+• Formule au choix : Abonnement mensuel léger ou Licence à vie définitive.
+
+Seriez-vous disponibles pour que notre équipe passe vous faire une démonstration de 10 minutes sur tablette cette semaine dans votre établissement ?
+
+Bien cordialement,
+L'Équipe Fondatrice SmartResto Bamako
+Contact référent : Ibrahim Tomota (+223 93 23 91 87)", "id": 66, "wa_number": ""}, {"nom": "Les Délices de Koko", "ville": "Bamako", "quartier": "Sotuba ACI", "adresse": "Sotuba ACI", "telephone": "+223 90 12 72 30", "email": "delicesdekoko@gmail.com", "type": "Pâtisserie fine, Salon de thé & Brunchs", "offre": "SaaS Mensuel", "argument": "Avis clients et programme de fidélité par numéro", "custom_pitch": "Bonjour la direction de Les Délices de Koko,
+
+Nous sommes un collectif de 4 jeunes ingénieurs maliens en Intelligence Artificielle (IA) et solutions logicielles, concepteurs du système SmartResto Bamako.
+
+Nous avons développé une solution moderne pensée pour les établissements comme le vôtre (Pâtisserie fine, Salon de thé & Brunchs) :
+• Avis clients et programme de fidélité par numéro
+• Écran cuisine KDS intelligent pour synchroniser la cuisine et supprimer les erreurs
+• 100% autonome en Wi-Fi local sans dépendre des coupures Internet (Orange/Moov)
+• Formule au choix : Abonnement mensuel léger ou Licence à vie définitive.
+
+Seriez-vous disponibles pour que notre équipe passe vous faire une démonstration de 10 minutes sur tablette cette semaine dans votre établissement ?
+
+Bien cordialement,
+L'Équipe Fondatrice SmartResto Bamako
+Contact référent : Ibrahim Tomota (+223 93 23 91 87)", "id": 67, "wa_number": "22390127230"}, {"nom": "Le Fali Fato", "ville": "Bamako", "quartier": "Faso Kanu", "adresse": "Faso Kanu, Rive droite", "telephone": "+223 63 61 63 46", "email": "falifato.bamako@gmail.com", "type": "Maquis chic en plein air au bord du fleuve", "offre": "Licence Perpétuelle", "argument": "Résistance 100% hors-ligne sur réseau Wi-Fi local", "custom_pitch": "Bonjour la direction de Le Fali Fato,
+
+Nous sommes un collectif de 4 jeunes ingénieurs maliens en Intelligence Artificielle (IA) et solutions logicielles, concepteurs du système SmartResto Bamako.
+
+Nous avons développé une solution moderne pensée pour les établissements comme le vôtre (Maquis chic en plein air au bord du fleuve) :
+• Résistance 100% hors-ligne sur réseau Wi-Fi local
+• Écran cuisine KDS intelligent pour synchroniser la cuisine et supprimer les erreurs
+• 100% autonome en Wi-Fi local sans dépendre des coupures Internet (Orange/Moov)
+• Formule au choix : Abonnement mensuel léger ou Licence à vie définitive.
+
+Seriez-vous disponibles pour que notre équipe passe vous faire une démonstration de 10 minutes sur tablette cette semaine dans votre établissement ?
+
+Bien cordialement,
+L'Équipe Fondatrice SmartResto Bamako
+Contact référent : Ibrahim Tomota (+223 93 23 91 87)", "id": 68, "wa_number": "22363616346"}, {"nom": "La Rose d'Or", "ville": "Bamako", "quartier": "Baco Djicoroni ACI", "adresse": "Baco Djicoroni ACI", "telephone": "+223 20 22 68 90", "email": "larosedor.bko@gmail.com", "type": "Restaurant familial, Grillades & Pâtisserie", "offre": "Licence Perpétuelle", "argument": "Contrôle complet des recettes et du coût de revient", "custom_pitch": "Bonjour la direction de La Rose d'Or,
+
+Nous sommes un collectif de 4 jeunes ingénieurs maliens en Intelligence Artificielle (IA) et solutions logicielles, concepteurs du système SmartResto Bamako.
+
+Nous avons développé une solution moderne pensée pour les établissements comme le vôtre (Restaurant familial, Grillades & Pâtisserie) :
+• Contrôle complet des recettes et du coût de revient
+• Écran cuisine KDS intelligent pour synchroniser la cuisine et supprimer les erreurs
+• 100% autonome en Wi-Fi local sans dépendre des coupures Internet (Orange/Moov)
+• Formule au choix : Abonnement mensuel léger ou Licence à vie définitive.
+
+Seriez-vous disponibles pour que notre équipe passe vous faire une démonstration de 10 minutes sur tablette cette semaine dans votre établissement ?
+
+Bien cordialement,
+L'Équipe Fondatrice SmartResto Bamako
+Contact référent : Ibrahim Tomota (+223 93 23 91 87)", "id": 69, "wa_number": ""}, {"nom": "Les Saveurs du Sénégal", "ville": "Bamako", "quartier": "Kalaban Coura", "adresse": "Kalaban Coura, Rue 207 (près Cabinet Médical Naata)", "telephone": "+223 76 45 30 74", "email": "saveursdusenegal.bko@gmail.com", "type": "Spécialités sénégalaises (Thiéboudienne, Yassa) & Traiteur", "offre": "SaaS Mensuel", "argument": "Bouton rupture express dès qu'une marmite est épuisée", "custom_pitch": "Bonjour la direction de Les Saveurs du Sénégal,
+
+Nous sommes un collectif de 4 jeunes ingénieurs maliens en Intelligence Artificielle (IA) et solutions logicielles, concepteurs du système SmartResto Bamako.
+
+Nous avons développé une solution moderne pensée pour les établissements comme le vôtre (Spécialités sénégalaises (Thiéboudienne, Yassa) & Traiteur) :
+• Bouton rupture express dès qu'une marmite est épuisée
+• Écran cuisine KDS intelligent pour synchroniser la cuisine et supprimer les erreurs
+• 100% autonome en Wi-Fi local sans dépendre des coupures Internet (Orange/Moov)
+• Formule au choix : Abonnement mensuel léger ou Licence à vie définitive.
+
+Seriez-vous disponibles pour que notre équipe passe vous faire une démonstration de 10 minutes sur tablette cette semaine dans votre établissement ?
+
+Bien cordialement,
+L'Équipe Fondatrice SmartResto Bamako
+Contact référent : Ibrahim Tomota (+223 93 23 91 87)", "id": 70, "wa_number": "22376453074"}, {"nom": "Croc Pizza Bamako", "ville": "Bamako", "quartier": "Commune VI", "adresse": "Rue 376, Commune VI", "telephone": "+223 76 67 10 10", "email": "crocpizza.mali@gmail.com", "type": "Pizzeria artisanale & Livraison rapide", "offre": "SaaS Mensuel", "argument": "Affichage KDS du minutage de cuisson des pizzas", "custom_pitch": "Bonjour la direction de Croc Pizza Bamako,
+
+Nous sommes un collectif de 4 jeunes ingénieurs maliens en Intelligence Artificielle (IA) et solutions logicielles, concepteurs du système SmartResto Bamako.
+
+Nous avons développé une solution moderne pensée pour les établissements comme le vôtre (Pizzeria artisanale & Livraison rapide) :
+• Affichage KDS du minutage de cuisson des pizzas
+• Écran cuisine KDS intelligent pour synchroniser la cuisine et supprimer les erreurs
+• 100% autonome en Wi-Fi local sans dépendre des coupures Internet (Orange/Moov)
+• Formule au choix : Abonnement mensuel léger ou Licence à vie définitive.
+
+Seriez-vous disponibles pour que notre équipe passe vous faire une démonstration de 10 minutes sur tablette cette semaine dans votre établissement ?
+
+Bien cordialement,
+L'Équipe Fondatrice SmartResto Bamako
+Contact référent : Ibrahim Tomota (+223 93 23 91 87)", "id": 71, "wa_number": "22376671010"}, {"nom": "Cantine du Bonheur", "ville": "Bamako", "quartier": "Banankabougou", "adresse": "Rue 758, Porte 88, Banankabougou", "telephone": "+223 66 73 83 31", "email": "cantinedubonheur.bko@gmail.com", "type": "Cuisine familiale africaine & Cantine d'entreprise", "offre": "SaaS Mensuel", "argument": "Encaissement rapide par menu du jour forfaitaire", "custom_pitch": "Bonjour la direction de Cantine du Bonheur,
+
+Nous sommes un collectif de 4 jeunes ingénieurs maliens en Intelligence Artificielle (IA) et solutions logicielles, concepteurs du système SmartResto Bamako.
+
+Nous avons développé une solution moderne pensée pour les établissements comme le vôtre (Cuisine familiale africaine & Cantine d'entreprise) :
+• Encaissement rapide par menu du jour forfaitaire
+• Écran cuisine KDS intelligent pour synchroniser la cuisine et supprimer les erreurs
+• 100% autonome en Wi-Fi local sans dépendre des coupures Internet (Orange/Moov)
+• Formule au choix : Abonnement mensuel léger ou Licence à vie définitive.
+
+Seriez-vous disponibles pour que notre équipe passe vous faire une démonstration de 10 minutes sur tablette cette semaine dans votre établissement ?
+
+Bien cordialement,
+L'Équipe Fondatrice SmartResto Bamako
+Contact référent : Ibrahim Tomota (+223 93 23 91 87)", "id": 72, "wa_number": "22366738331"}, {"nom": "Mam-Set Restaurant", "ville": "Bamako", "quartier": "Yirimadio", "adresse": "Yirimadio 501 Logements, Rue 586 Porte 346", "telephone": "+223 66 73 61 84", "email": "mamset.bamako@gmail.com", "type": "Restaurant de quartier & Traiteur réceptions", "offre": "SaaS Mensuel", "argument": "Gestion des commandes sur place et à emporter", "custom_pitch": "Bonjour la direction de Mam-Set Restaurant,
+
+Nous sommes un collectif de 4 jeunes ingénieurs maliens en Intelligence Artificielle (IA) et solutions logicielles, concepteurs du système SmartResto Bamako.
+
+Nous avons développé une solution moderne pensée pour les établissements comme le vôtre (Restaurant de quartier & Traiteur réceptions) :
+• Gestion des commandes sur place et à emporter
+• Écran cuisine KDS intelligent pour synchroniser la cuisine et supprimer les erreurs
+• 100% autonome en Wi-Fi local sans dépendre des coupures Internet (Orange/Moov)
+• Formule au choix : Abonnement mensuel léger ou Licence à vie définitive.
+
+Seriez-vous disponibles pour que notre équipe passe vous faire une démonstration de 10 minutes sur tablette cette semaine dans votre établissement ?
+
+Bien cordialement,
+L'Équipe Fondatrice SmartResto Bamako
+Contact référent : Ibrahim Tomota (+223 93 23 91 87)", "id": 73, "wa_number": "22366736184"}, {"nom": "Chef Teresa Table & Traiteur", "ville": "Bamako", "quartier": "Attbougou", "adresse": "759 Logements, Attbougou", "telephone": "+223 90 21 78 74", "email": "chefteresa.bamako@gmail.com", "type": "Table d'hôtes & Gastronomie traiteur sur commande", "offre": "SaaS Mensuel", "argument": "Devis et facturation traiteur automatisée", "custom_pitch": "Bonjour la direction de Chef Teresa Table & Traiteur,
+
+Nous sommes un collectif de 4 jeunes ingénieurs maliens en Intelligence Artificielle (IA) et solutions logicielles, concepteurs du système SmartResto Bamako.
+
+Nous avons développé une solution moderne pensée pour les établissements comme le vôtre (Table d'hôtes & Gastronomie traiteur sur commande) :
+• Devis et facturation traiteur automatisée
+• Écran cuisine KDS intelligent pour synchroniser la cuisine et supprimer les erreurs
+• 100% autonome en Wi-Fi local sans dépendre des coupures Internet (Orange/Moov)
+• Formule au choix : Abonnement mensuel léger ou Licence à vie définitive.
+
+Seriez-vous disponibles pour que notre équipe passe vous faire une démonstration de 10 minutes sur tablette cette semaine dans votre établissement ?
+
+Bien cordialement,
+L'Équipe Fondatrice SmartResto Bamako
+Contact référent : Ibrahim Tomota (+223 93 23 91 87)", "id": 74, "wa_number": "22390217874"}, {"nom": "Aerocream", "ville": "Bamako", "quartier": "Aéroport Sénou", "adresse": "Aéroport International Modibo Keïta, Sénou", "telephone": "+223 66 16 54 54", "email": "aerocream.senou@gmail.com", "type": "Restaurant et brasserie d'aéroport", "offre": "SaaS Mensuel", "argument": "Cadence express pour voyageurs avant embarquement", "custom_pitch": "Bonjour la direction de Aerocream,
+
+Nous sommes un collectif de 4 jeunes ingénieurs maliens en Intelligence Artificielle (IA) et solutions logicielles, concepteurs du système SmartResto Bamako.
+
+Nous avons développé une solution moderne pensée pour les établissements comme le vôtre (Restaurant et brasserie d'aéroport) :
+• Cadence express pour voyageurs avant embarquement
+• Écran cuisine KDS intelligent pour synchroniser la cuisine et supprimer les erreurs
+• 100% autonome en Wi-Fi local sans dépendre des coupures Internet (Orange/Moov)
+• Formule au choix : Abonnement mensuel léger ou Licence à vie définitive.
+
+Seriez-vous disponibles pour que notre équipe passe vous faire une démonstration de 10 minutes sur tablette cette semaine dans votre établissement ?
+
+Bien cordialement,
+L'Équipe Fondatrice SmartResto Bamako
+Contact référent : Ibrahim Tomota (+223 93 23 91 87)", "id": 75, "wa_number": "22366165454"}, {"nom": "Restaurant Kheel Keen", "ville": "Bamako", "quartier": "Boukasoumbougou", "adresse": "Boukasoumbougou", "telephone": "+223 76 30 56 32", "email": "kheelkeen.bko@gmail.com", "type": "Restauration rapide & Plats traditionnels", "offre": "SaaS Mensuel", "argument": "Gestion simple et intuitive pour le personnel", "custom_pitch": "Bonjour la direction de Restaurant Kheel Keen,
+
+Nous sommes un collectif de 4 jeunes ingénieurs maliens en Intelligence Artificielle (IA) et solutions logicielles, concepteurs du système SmartResto Bamako.
+
+Nous avons développé une solution moderne pensée pour les établissements comme le vôtre (Restauration rapide & Plats traditionnels) :
+• Gestion simple et intuitive pour le personnel
+• Écran cuisine KDS intelligent pour synchroniser la cuisine et supprimer les erreurs
+• 100% autonome en Wi-Fi local sans dépendre des coupures Internet (Orange/Moov)
+• Formule au choix : Abonnement mensuel léger ou Licence à vie définitive.
+
+Seriez-vous disponibles pour que notre équipe passe vous faire une démonstration de 10 minutes sur tablette cette semaine dans votre établissement ?
+
+Bien cordialement,
+L'Équipe Fondatrice SmartResto Bamako
+Contact référent : Ibrahim Tomota (+223 93 23 91 87)", "id": 76, "wa_number": "22376305632"}, {"nom": "Restaurant L'Ananas", "ville": "Bamako", "quartier": "Niamakoro", "adresse": "Route de Niamakoro", "telephone": "+223 76 45 28 60", "email": "lananas.mali@gmail.com", "type": "Restaurant africain & bar convivial", "offre": "SaaS Mensuel", "argument": "Contrôle des encaissements et tickets caisse", "custom_pitch": "Bonjour la direction de Restaurant L'Ananas,
+
+Nous sommes un collectif de 4 jeunes ingénieurs maliens en Intelligence Artificielle (IA) et solutions logicielles, concepteurs du système SmartResto Bamako.
+
+Nous avons développé une solution moderne pensée pour les établissements comme le vôtre (Restaurant africain & bar convivial) :
+• Contrôle des encaissements et tickets caisse
+• Écran cuisine KDS intelligent pour synchroniser la cuisine et supprimer les erreurs
+• 100% autonome en Wi-Fi local sans dépendre des coupures Internet (Orange/Moov)
+• Formule au choix : Abonnement mensuel léger ou Licence à vie définitive.
+
+Seriez-vous disponibles pour que notre équipe passe vous faire une démonstration de 10 minutes sur tablette cette semaine dans votre établissement ?
+
+Bien cordialement,
+L'Équipe Fondatrice SmartResto Bamako
+Contact référent : Ibrahim Tomota (+223 93 23 91 87)", "id": 77, "wa_number": "22376452860"}, {"nom": "Resto Bafing", "ville": "Bamako", "quartier": "Centre", "adresse": "Rue 309, Bamako", "telephone": "+223 66 72 11 39", "email": "restobafing@gmail.com", "type": "Restaurant traditionnel & grillades", "offre": "Licence Perpétuelle", "argument": "Gestion robuste et autonome", "custom_pitch": "Bonjour la direction de Resto Bafing,
+
+Nous sommes un collectif de 4 jeunes ingénieurs maliens en Intelligence Artificielle (IA) et solutions logicielles, concepteurs du système SmartResto Bamako.
+
+Nous avons développé une solution moderne pensée pour les établissements comme le vôtre (Restaurant traditionnel & grillades) :
+• Gestion robuste et autonome
+• Écran cuisine KDS intelligent pour synchroniser la cuisine et supprimer les erreurs
+• 100% autonome en Wi-Fi local sans dépendre des coupures Internet (Orange/Moov)
+• Formule au choix : Abonnement mensuel léger ou Licence à vie définitive.
+
+Seriez-vous disponibles pour que notre équipe passe vous faire une démonstration de 10 minutes sur tablette cette semaine dans votre établissement ?
+
+Bien cordialement,
+L'Équipe Fondatrice SmartResto Bamako
+Contact référent : Ibrahim Tomota (+223 93 23 91 87)", "id": 78, "wa_number": "22366721139"}, {"nom": "Restaurant Le Golft", "ville": "Ségou", "quartier": "Centre Commercial", "adresse": "Centre Commercial, Ségou", "telephone": "+223 21 32 06 98", "email": "hotellegolft.segou@gmail.com", "type": "Hôtel-Restaurant de référence de Ségou", "offre": "Licence Perpétuelle", "argument": "Parfait pour un fonctionnement 100% hors-ligne en région", "custom_pitch": "Bonjour la direction de Restaurant Le Golft,
+
+Nous sommes un collectif de 4 jeunes ingénieurs maliens en Intelligence Artificielle (IA) et solutions logicielles, concepteurs du système SmartResto Bamako.
+
+Nous avons développé une solution moderne pensée pour les établissements comme le vôtre (Hôtel-Restaurant de référence de Ségou) :
+• Parfait pour un fonctionnement 100% hors-ligne en région
+• Écran cuisine KDS intelligent pour synchroniser la cuisine et supprimer les erreurs
+• 100% autonome en Wi-Fi local sans dépendre des coupures Internet (Orange/Moov)
+• Formule au choix : Abonnement mensuel léger ou Licence à vie définitive.
+
+Seriez-vous disponibles pour que notre équipe passe vous faire une démonstration de 10 minutes sur tablette cette semaine dans votre établissement ?
+
+Bien cordialement,
+L'Équipe Fondatrice SmartResto Bamako
+Contact référent : Ibrahim Tomota (+223 93 23 91 87)", "id": 79, "wa_number": ""}, {"nom": "Restaurant Sewa", "ville": "Ségou", "quartier": "Boulevard 200", "adresse": "Boulevard 200, Ségou", "telephone": "+223 60 85 02 73", "email": "sewa.segou@gmail.com", "type": "Cuisine ségovienne traditionnelle & Poissons du fleuve", "offre": "Licence Perpétuelle", "argument": "Prise en main immédiate par l'équipe sans compétences techniques", "custom_pitch": "Bonjour la direction de Restaurant Sewa,
+
+Nous sommes un collectif de 4 jeunes ingénieurs maliens en Intelligence Artificielle (IA) et solutions logicielles, concepteurs du système SmartResto Bamako.
+
+Nous avons développé une solution moderne pensée pour les établissements comme le vôtre (Cuisine ségovienne traditionnelle & Poissons du fleuve) :
+• Prise en main immédiate par l'équipe sans compétences techniques
+• Écran cuisine KDS intelligent pour synchroniser la cuisine et supprimer les erreurs
+• 100% autonome en Wi-Fi local sans dépendre des coupures Internet (Orange/Moov)
+• Formule au choix : Abonnement mensuel léger ou Licence à vie définitive.
+
+Seriez-vous disponibles pour que notre équipe passe vous faire une démonstration de 10 minutes sur tablette cette semaine dans votre établissement ?
+
+Bien cordialement,
+L'Équipe Fondatrice SmartResto Bamako
+Contact référent : Ibrahim Tomota (+223 93 23 91 87)", "id": 80, "wa_number": "22360850273"}, {"nom": "Le Djoliden Hôtel-Restaurant", "ville": "Ségou", "quartier": "Rive du Fleuve", "adresse": "Rive du Fleuve Niger, Ségou", "telephone": "+223 21 32 11 11", "email": "djoliden.segou@gmail.com", "type": "Hôtel-restaurant de charme touristique & terroirs", "offre": "Licence Perpétuelle", "argument": "Gestion autonome sur serveur local sans abonnement obligatoire", "custom_pitch": "Bonjour la direction de Le Djoliden Hôtel-Restaurant,
+
+Nous sommes un collectif de 4 jeunes ingénieurs maliens en Intelligence Artificielle (IA) et solutions logicielles, concepteurs du système SmartResto Bamako.
+
+Nous avons développé une solution moderne pensée pour les établissements comme le vôtre (Hôtel-restaurant de charme touristique & terroirs) :
+• Gestion autonome sur serveur local sans abonnement obligatoire
+• Écran cuisine KDS intelligent pour synchroniser la cuisine et supprimer les erreurs
+• 100% autonome en Wi-Fi local sans dépendre des coupures Internet (Orange/Moov)
+• Formule au choix : Abonnement mensuel léger ou Licence à vie définitive.
+
+Seriez-vous disponibles pour que notre équipe passe vous faire une démonstration de 10 minutes sur tablette cette semaine dans votre établissement ?
+
+Bien cordialement,
+L'Équipe Fondatrice SmartResto Bamako
+Contact référent : Ibrahim Tomota (+223 93 23 91 87)", "id": 81, "wa_number": ""}, {"nom": "Restaurant Sobeil de Minuit", "ville": "Ségou", "quartier": "Centre Commercial", "adresse": "Centre Commercial, Ségou", "telephone": "+223 21 32 15 05", "email": "sobeil.segou@gmail.com", "type": "Restaurant étape & cuisine locale", "offre": "Licence Perpétuelle", "argument": "Système de caisse simple avec ticket client", "custom_pitch": "Bonjour la direction de Restaurant Sobeil de Minuit,
+
+Nous sommes un collectif de 4 jeunes ingénieurs maliens en Intelligence Artificielle (IA) et solutions logicielles, concepteurs du système SmartResto Bamako.
+
+Nous avons développé une solution moderne pensée pour les établissements comme le vôtre (Restaurant étape & cuisine locale) :
+• Système de caisse simple avec ticket client
+• Écran cuisine KDS intelligent pour synchroniser la cuisine et supprimer les erreurs
+• 100% autonome en Wi-Fi local sans dépendre des coupures Internet (Orange/Moov)
+• Formule au choix : Abonnement mensuel léger ou Licence à vie définitive.
+
+Seriez-vous disponibles pour que notre équipe passe vous faire une démonstration de 10 minutes sur tablette cette semaine dans votre établissement ?
+
+Bien cordialement,
+L'Équipe Fondatrice SmartResto Bamako
+Contact référent : Ibrahim Tomota (+223 93 23 91 87)", "id": 82, "wa_number": ""}, {"nom": "Restaurant Tantie J'ai Faim", "ville": "Ségou", "quartier": "Hamdallaye Ségou", "adresse": "Hamdallaye, Ségou", "telephone": "+223 21 32 03 63", "email": "tantiejaifaim@gmail.com", "type": "Cuisine africaine populaire & grillades", "offre": "Licence Perpétuelle", "argument": "Anti-pertes et gestion des portions de viande", "custom_pitch": "Bonjour la direction de Restaurant Tantie J'ai Faim,
+
+Nous sommes un collectif de 4 jeunes ingénieurs maliens en Intelligence Artificielle (IA) et solutions logicielles, concepteurs du système SmartResto Bamako.
+
+Nous avons développé une solution moderne pensée pour les établissements comme le vôtre (Cuisine africaine populaire & grillades) :
+• Anti-pertes et gestion des portions de viande
+• Écran cuisine KDS intelligent pour synchroniser la cuisine et supprimer les erreurs
+• 100% autonome en Wi-Fi local sans dépendre des coupures Internet (Orange/Moov)
+• Formule au choix : Abonnement mensuel léger ou Licence à vie définitive.
+
+Seriez-vous disponibles pour que notre équipe passe vous faire une démonstration de 10 minutes sur tablette cette semaine dans votre établissement ?
+
+Bien cordialement,
+L'Équipe Fondatrice SmartResto Bamako
+Contact référent : Ibrahim Tomota (+223 93 23 91 87)", "id": 83, "wa_number": ""}, {"nom": "Restaurant Cotonnier", "ville": "Fana", "quartier": "Axe National", "adresse": "Axe Bamako - Ségou, Fana", "telephone": "+223 73 95 30 92", "email": "cotonnier.fana@gmail.com", "type": "Restaurant d'escale routière & grillades", "offre": "Licence Perpétuelle", "argument": "Service ultra-rapide pour voyageurs de passage", "custom_pitch": "Bonjour la direction de Restaurant Cotonnier,
+
+Nous sommes un collectif de 4 jeunes ingénieurs maliens en Intelligence Artificielle (IA) et solutions logicielles, concepteurs du système SmartResto Bamako.
+
+Nous avons développé une solution moderne pensée pour les établissements comme le vôtre (Restaurant d'escale routière & grillades) :
+• Service ultra-rapide pour voyageurs de passage
+• Écran cuisine KDS intelligent pour synchroniser la cuisine et supprimer les erreurs
+• 100% autonome en Wi-Fi local sans dépendre des coupures Internet (Orange/Moov)
+• Formule au choix : Abonnement mensuel léger ou Licence à vie définitive.
+
+Seriez-vous disponibles pour que notre équipe passe vous faire une démonstration de 10 minutes sur tablette cette semaine dans votre établissement ?
+
+Bien cordialement,
+L'Équipe Fondatrice SmartResto Bamako
+Contact référent : Ibrahim Tomota (+223 93 23 91 87)", "id": 84, "wa_number": "22373953092"}, {"nom": "Hôtel-Restaurant Le Wassoulou", "ville": "Sikasso", "quartier": "Wayerma / Centre", "adresse": "Centre-ville / Wayerma, Sikasso", "telephone": "+223 21 62 05 05", "email": "wassoulou.sikasso@gmail.com", "type": "Hôtel-Restaurant du carrefour commercial du Kénédougou", "offre": "Licence Perpétuelle", "argument": "Gestion des flux de voyageurs et traçabilité des stocks", "custom_pitch": "Bonjour la direction de Hôtel-Restaurant Le Wassoulou,
+
+Nous sommes un collectif de 4 jeunes ingénieurs maliens en Intelligence Artificielle (IA) et solutions logicielles, concepteurs du système SmartResto Bamako.
+
+Nous avons développé une solution moderne pensée pour les établissements comme le vôtre (Hôtel-Restaurant du carrefour commercial du Kénédougou) :
+• Gestion des flux de voyageurs et traçabilité des stocks
+• Écran cuisine KDS intelligent pour synchroniser la cuisine et supprimer les erreurs
+• 100% autonome en Wi-Fi local sans dépendre des coupures Internet (Orange/Moov)
+• Formule au choix : Abonnement mensuel léger ou Licence à vie définitive.
+
+Seriez-vous disponibles pour que notre équipe passe vous faire une démonstration de 10 minutes sur tablette cette semaine dans votre établissement ?
+
+Bien cordialement,
+L'Équipe Fondatrice SmartResto Bamako
+Contact référent : Ibrahim Tomota (+223 93 23 91 87)", "id": 85, "wa_number": ""}, {"nom": "Hôtel-Restaurant Bouna", "ville": "Mopti", "quartier": "Sévaré / Mopti", "adresse": "Axe Mopti - Sévaré, Mopti", "telephone": "+223 21 42 04 04", "email": "hotelbouna.mopti@gmail.com", "type": "Complexe hôtelier avec restaurant gastronomique de la Venise malienne", "offre": "Licence Perpétuelle", "argument": "Solution robuste et autonome ne dépendant pas d'Internet", "custom_pitch": "Bonjour la direction de Hôtel-Restaurant Bouna,
+
+Nous sommes un collectif de 4 jeunes ingénieurs maliens en Intelligence Artificielle (IA) et solutions logicielles, concepteurs du système SmartResto Bamako.
+
+Nous avons développé une solution moderne pensée pour les établissements comme le vôtre (Complexe hôtelier avec restaurant gastronomique de la Venise malienne) :
+• Solution robuste et autonome ne dépendant pas d'Internet
+• Écran cuisine KDS intelligent pour synchroniser la cuisine et supprimer les erreurs
+• 100% autonome en Wi-Fi local sans dépendre des coupures Internet (Orange/Moov)
+• Formule au choix : Abonnement mensuel léger ou Licence à vie définitive.
+
+Seriez-vous disponibles pour que notre équipe passe vous faire une démonstration de 10 minutes sur tablette cette semaine dans votre établissement ?
+
+Bien cordialement,
+L'Équipe Fondatrice SmartResto Bamako
+Contact référent : Ibrahim Tomota (+223 93 23 91 87)", "id": 86, "wa_number": ""}, {"nom": "Restaurant Le Campement", "ville": "Mopti", "quartier": "Berges du Bani", "adresse": "Berges du Bani, Mopti", "telephone": "+223 21 43 00 15", "email": "campement.mopti@gmail.com", "type": "Restaurant historique & poissons grillés du fleuve", "offre": "Licence Perpétuelle", "argument": "Fonctionne hors-ligne en toute saison", "custom_pitch": "Bonjour la direction de Restaurant Le Campement,
+
+Nous sommes un collectif de 4 jeunes ingénieurs maliens en Intelligence Artificielle (IA) et solutions logicielles, concepteurs du système SmartResto Bamako.
+
+Nous avons développé une solution moderne pensée pour les établissements comme le vôtre (Restaurant historique & poissons grillés du fleuve) :
+• Fonctionne hors-ligne en toute saison
+• Écran cuisine KDS intelligent pour synchroniser la cuisine et supprimer les erreurs
+• 100% autonome en Wi-Fi local sans dépendre des coupures Internet (Orange/Moov)
+• Formule au choix : Abonnement mensuel léger ou Licence à vie définitive.
+
+Seriez-vous disponibles pour que notre équipe passe vous faire une démonstration de 10 minutes sur tablette cette semaine dans votre établissement ?
+
+Bien cordialement,
+L'Équipe Fondatrice SmartResto Bamako
+Contact référent : Ibrahim Tomota (+223 93 23 91 87)", "id": 87, "wa_number": ""}];
+
+// Load saved statuses & notes from localStorage
+function getSavedState() {
+    const saved = localStorage.getItem('smartresto_crm_state');
+    return saved ? JSON.parse(saved) : {};
+}
+
+function saveState(id, status, note) {
+    const state = getSavedState();
+    if (!state[id]) state[id] = {};
+    if (status !== undefined) state[id].status = status;
+    if (note !== undefined) state[id].note = note;
+    localStorage.setItem('smartresto_crm_state', JSON.stringify(state));
+    updateStats();
+}
+
+function updateStats() {
+    const state = getSavedState();
+    let envoyes = 0, rdv = 0, signes = 0;
+    
+    PROSPECTS.forEach(p => {
+        const s = (state[p.id] && state[p.id].status) || 'a_contacter';
+        if (s === 'envoye') envoyes++;
+        if (s === 'rdv') rdv++;
+        if (s === 'signe') signes++;
+    });
+
+    document.getElementById('stat-envoyes').innerText = envoyes;
+    document.getElementById('stat-rdv').innerText = rdv;
+    document.getElementById('stat-signes').innerText = signes;
+    const contacted = envoyes + rdv + signes;
+    const rate = contacted > 0 ? Math.round(((rdv + signes) / contacted) * 100) : 0;
+    document.getElementById('stat-taux').innerText = rate + '%';
+}
+
+function copyToClipboard(text, btnElement) {
+    navigator.clipboard.writeText(text).then(() => {
+        const originalText = btnElement.innerHTML;
+        btnElement.innerHTML = '<i class="fa fa-check text-success"></i> Copié !';
+        setTimeout(() => { btnElement.innerHTML = originalText; }, 2000);
+    });
+}
+
+function renderProspects() {
+    const container = document.getElementById('prospectsContainer');
+    const state = getSavedState();
+    const query = document.getElementById('searchInput').value.toLowerCase();
+    const quartierVal = document.getElementById('quartierFilter').value.toLowerCase();
+    const statusVal = document.getElementById('statusFilter').value;
+
+    let html = '';
+    let countVisible = 0;
+
+    PROSPECTS.forEach(p => {
+        const currentStatus = (state[p.id] && state[p.id].status) || 'a_contacter';
+        const currentNote = (state[p.id] && state[p.id].note) || '';
+
+        // Filters
+        if (query && !p.nom.toLowerCase().includes(query) && !p.adresse.toLowerCase().includes(query) && !p.type.toLowerCase().includes(query)) {
+            return;
+        }
+        if (quartierVal && !p.quartier.toLowerCase().includes(quartierVal) && !p.ville.toLowerCase().includes(quartierVal)) {
+            return;
+        }
+        if (statusVal && currentStatus !== statusVal) {
+            return;
+        }
+
+        countVisible++;
+
+        const isSaas = p.offre.toLowerCase().includes('saas');
+        const badgeOffreClass = isSaas ? 'badge-offre-saas' : 'badge-offre-licence';
+
+        // URL encoded wa text
+        const encodedWa = encodeURIComponent(p.custom_pitch);
+        const waLink = p.wa_number ? `https://web.whatsapp.com/send?phone=${p.wa_number}&text=${encodedWa}` : '#';
+        const hasWa = p.wa_number !== '';
+
+        const encodedSubject = encodeURIComponent(p.email_subject);
+        const encodedBody = encodeURIComponent(p.email_body);
+        const mailtoLink = `mailto:${p.email}?subject=${encodedSubject}&body=${encodedBody}`;
+
+        html += `
+        <div class="prospect-card">
+            <div class="row">
+                <div class="col-lg-7">
+                    <div class="d-flex align-items-center mb-2">
+                        <h4 class="fw-bold mb-0 me-2 text-dark">#${p.id} ${p.nom}</h4>
+                        <span class="badge ${badgeOffreClass} p-2 me-1">${p.offre}</span>
+                        <span class="badge badge-quartier p-2">${p.ville} - ${p.quartier}</span>
+                    </div>
+                    <p class="text-muted small mb-2"><i class="fa fa-map-marker-alt text-danger me-1"></i> ${p.adresse}</p>
+                    <p class="mb-2"><span class="badge bg-light text-dark border">${p.type}</span></p>
+                    <div class="alert alert-light border py-2 px-3 small mb-3 text-secondary">
+                        <strong><i class="fa fa-lightbulb text-warning me-1"></i> Argument clé :</strong> ${p.argument}
+                    </div>
+                    <div class="d-flex flex-wrap gap-2 align-items-center">
+                        <span class="small text-muted"><i class="fa fa-phone me-1"></i> ${p.telephone}</span>
+                        ${p.email ? `<span class="small text-muted ms-3"><i class="fa fa-envelope me-1"></i> ${p.email}</span>` : ''}
+                    </div>
+                </div>
+                <div class="col-lg-5 mt-3 mt-lg-0 border-start-lg ps-lg-4 d-flex flex-column justify-content-between">
+                    <div>
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold text-uppercase mb-1 text-muted">Statut Démarchage :</label>
+                            <select class="form-select form-select-sm fw-bold" onchange="saveState(${p.id}, this.value, undefined)">
+                                <option value="a_contacter" ${currentStatus === 'a_contacter' ? 'selected' : ''}>⚪ À contacter</option>
+                                <option value="envoye" ${currentStatus === 'envoye' ? 'selected' : ''}>🟡 Message / Email envoyé</option>
+                                <option value="rdv" ${currentStatus === 'rdv' ? 'selected' : ''}>🟢 RDV Démo Programmé</option>
+                                <option value="signe" ${currentStatus === 'signe' ? 'selected' : ''}>💎 Client Signé 🎉</option>
+                                <option value="non" ${currentStatus === 'non' ? 'selected' : ''}>🔴 Pas intéressé</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <input type="text" class="form-control form-control-sm" placeholder="Note rapide (ex: Rappeler mardi 11h)..." value="${currentNote}" onchange="saveState(${p.id}, undefined, this.value)">
+                        </div>
+                    </div>
+                    <div class="d-flex flex-wrap gap-2">
+                        ${hasWa ? `
+                            <a href="${waLink}" target="_blank" class="btn btn-wa btn-sm flex-fill text-center py-2" onclick="saveState(${p.id}, 'envoye', undefined)">
+                                <i class="fab fa-whatsapp me-1"></i> Contacter sur WhatsApp
+                            </a>
+                        ` : `
+                            <button class="btn btn-secondary btn-sm flex-fill" disabled title="Pas de mobile WhatsApp direct renseigné">
+                                <i class="fab fa-whatsapp me-1"></i> Pas de WhatsApp
+                            </button>
+                        `}
+                        <button class="btn btn-copy btn-sm" onclick="copyToClipboard(\`${p.custom_pitch.replace(/`/g, '\\`')}\`, this)" title="Copier le pitch personnalisé">
+                            <i class="fa fa-copy"></i> Copier
+                        </button>
+                        ${p.email ? `
+                            <a href="${mailtoLink}" class="btn btn-outline-primary btn-sm" onclick="saveState(${p.id}, 'envoye', undefined)" title="Envoyer un email personnalisé">
+                                <i class="fa fa-envelope"></i> Email
+                            </a>
+                        ` : ''}
+                    </div>
+                </div>
+            </div>
+        </div>
+        `;
+    });
+
+    if (countVisible === 0) {
+        html = '<div class="alert alert-info text-center py-5">Aucun prospect ne correspond à vos filtres de recherche.</div>';
+    }
+
+    container.innerHTML = html;
+}
+
+function exportData() {
+    const state = getSavedState();
+    let csvContent = 'id,nom,ville,quartier,telephone,email,statut,note\n';
+    PROSPECTS.forEach(p => {
+        const s = (state[p.id] && state[p.id].status) || 'a_contacter';
+        const n = (state[p.id] && state[p.id].note) || '';
+        csvContent += `"${p.id}","${p.nom}","${p.ville}","${p.quartier}","${p.telephone}","${p.email}","${s}","${n.replace(/"/g, '""')}"\n`;
+    });
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'suivi_demarchage_smartresto_mali.csv';
+    a.click();
+}
+
+document.getElementById('searchInput').addEventListener('input', renderProspects);
+document.getElementById('quartierFilter').addEventListener('change', renderProspects);
+document.getElementById('statusFilter').addEventListener('change', renderProspects);
+
+// Initial Render
+renderProspects();
+updateStats();
+</script>
+
+</body>
+</html>

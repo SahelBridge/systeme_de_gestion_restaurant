@@ -7,13 +7,10 @@ l'interface tablette que par l'ecran cuisine et teste independamment.
 # Rend les annotations de type plus souples à l'exécution.
 from __future__ import annotations
 
-# Lit le catalogue de plats au format JSON.
 import json
-# Sert à comparer les tags indépendamment des accents.
+from datetime import datetime
 import unicodedata
-# Construit le chemin vers le fichier du menu.
 from pathlib import Path
-# Indique qu'une valeur peut avoir différents types.
 from typing import Any
 
 
@@ -39,11 +36,15 @@ def _normalise(value: str) -> str:
     return "".join(char for char in decomposed if unicodedata.category(char) != "Mn")
 
 
-def load_menu(menu_path: str | Path | None = None) -> list[dict[str, Any]]:
+def load_menu(
+    menu_path: str | Path | None = None,
+    apply_overrides: bool = True,
+) -> list[dict[str, Any]]:
     """Charge et controle sommairement le catalogue JSON.
 
     ``menu_path`` est optionnel afin de simplifier les tests sans modifier le
     catalogue partage par l'equipe.
+    ``apply_overrides`` applique les ruptures de stock déclarées en base SQLite.
     """
     # Prend le chemin fourni pour les tests, ou le menu principal par défaut.
     path = Path(menu_path) if menu_path is not None else MENU_PATH
@@ -62,6 +63,24 @@ def load_menu(menu_path: str | Path | None = None) -> list[dict[str, Any]]:
     # Le contrat de données exige une liste de plats.
     if not isinstance(menu, list):
         raise ValueError("Le catalogue doit etre une liste de plats.")
+
+    if apply_overrides:
+        try:
+            from database import get_dish_overrides
+            overrides = get_dish_overrides()
+            if overrides:
+                updated = []
+                for item in menu:
+                    if isinstance(item, dict):
+                        d = item.copy()
+                        d_id = d.get("id")
+                        if d_id in overrides:
+                            d["disponible"] = overrides[d_id]
+                        updated.append(d)
+                return updated
+        except Exception:
+            pass
+
     # Remet le catalogue validé à l'appelant.
     return menu
 
@@ -234,13 +253,16 @@ def process_order(table_id: int, order_items: list) -> dict:
     total = round(total, 2)
     # Évalue le délai en fonction des tickets actifs avant la nouvelle commande.
     estimated_wait_time = estimate_wait_time()
+    now = datetime.now()
+    order_id = f"CMD-{now.strftime('%Y%m%d%H%M%S%f')[:17]}"
+    date_str = now.strftime("%Y-%m-%d %H:%M:%S")
 
     try:
         # Importe la fonction de sauvegarde seulement au moment de l'utiliser.
         from database import save_order
 
         # Enregistre la commande validée et récupère la confirmation de la base.
-        saved = save_order(table_id, validated_items, total)
+        saved = save_order(table_id, validated_items, total, order_id=order_id)
     except (ImportError, ModuleNotFoundError) as error:
         # Explique l'absence du module chargé de la persistance.
         raise OrderPersistenceError("Le module database.py est indisponible.") from error
@@ -254,10 +276,83 @@ def process_order(table_id: int, order_items: list) -> dict:
 
     # Renvoie à l'interface toutes les informations utiles de la commande créée.
     return {
+        "id": order_id,
         "table_id": table_id,
         "items": validated_items,
         "total": total,
         "estimated_wait_time": estimated_wait_time,
         "estimated_wait_time_minutes": estimated_wait_time,
+        "temps_estime_minutes": estimated_wait_time,
         "status": "en_attente",
+        "statut": "en_attente",
+        "date_commande": date_str,
     }
+
+
+# =============================================================================
+# FONCTIONS AUXILIAIRES MÉTIER (CUISINE, STATS, FIDÉLITÉ, APPEL SERVEUR)
+# =============================================================================
+
+def toggle_dish_stock(dish_id: str, disponible: bool) -> bool:
+    """Active ou désactive un plat (rupture de stock express pour la cuisine)."""
+    try:
+        from database import set_dish_availability
+        return set_dish_availability(dish_id, disponible)
+    except Exception:
+        return False
+
+
+def get_top_sales(limit: int = 3) -> list[dict[str, Any]]:
+    """Retourne le classement des plats les plus vendus."""
+    try:
+        from database import get_top_sales as db_get_top_sales
+        return db_get_top_sales(limit)
+    except Exception:
+        return []
+
+
+def save_server_call(table_id: int, call_type: str) -> bool:
+    """Enregistre un appel serveur émis par une tablette table."""
+    try:
+        from database import save_server_call as db_save_call
+        return db_save_call(table_id, call_type)
+    except Exception:
+        return False
+
+
+def get_active_server_calls() -> list[dict[str, Any]]:
+    """Récupère les appels serveurs non encore traités."""
+    try:
+        from database import get_active_server_calls as db_get_calls
+        return db_get_calls()
+    except Exception:
+        return []
+
+
+def resolve_server_call(call_id: int) -> bool:
+    """Marque un appel serveur comme traité."""
+    try:
+        from database import resolve_server_call as db_resolve_call
+        return db_resolve_call(call_id)
+    except Exception:
+        return False
+
+
+def save_review_and_fidelity(
+    table_id: int,
+    stars: int,
+    phone: str = "",
+    comment: str = "",
+    points: int = 0,
+) -> bool:
+    """Enregistre l'avis client et crédite les points de fidélité associés."""
+    try:
+        from database import save_fidelity_profile, save_review
+        rev_ok = save_review(table_id, stars, phone, comment)
+        fid_ok = True
+        if phone.strip() and points > 0:
+            fid_ok = save_fidelity_profile(phone.strip(), points)
+        return rev_ok and fid_ok
+    except Exception:
+        return False
+
